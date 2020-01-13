@@ -158,34 +158,55 @@ void display(void)
     
     
     glColor3d(0,0,1);
+    out_of_bounds_x(cx1, cv1);
+    out_of_bounds_y(cy1, cv1);
     DrawCircle(cx1,cy1,cs1);
     
     glColor3d(0.2,0.7,0.3);
+   out_of_bounds_x(cx1, cv1);
+   out_of_bounds_y(cy1, cv1);
     DrawCircle(cx2,cy2,cs2);
     
     glColor3d(0,0,0);
+    out_of_bounds_x(cx1, cv1);
+    out_of_bounds_y(cy1, cv1);
     DrawCircle(cx3,cy3,cs3);
     
     glColor3d(0.5,0.1,1);
+    out_of_bounds_x(cx1, cv1);
+    out_of_bounds_y(cy1, cv1);
     DrawCircle(cx4,cy4,cs4);
     
     glColor3d(0.8,0.2,1);
+    out_of_bounds_x(cx1, cv1);
+    out_of_bounds_y(cy1, cv1);
     DrawCircle(cx5,cy5,cs5);
     
     glColor3d(0,0,5);
+    out_of_bounds_x(cx1, cv1);
+    out_of_bounds_y(cy1, cv1);
     DrawCircle(cx6,cy6,cs6);
     
     glColor3d(0.9,0.77,0.2);
+    out_of_bounds_x(cx1, cv1);
+    out_of_bounds_y(cy1, cv1);
     DrawCircle(cx7,cy7,cs7);
     
     glColor3d(0,0,0);
+    out_of_bounds_x(cx1, cv1);
+    out_of_bounds_y(cy1, cv1);
     DrawCircle(cx8,cy8,cs8);
     
     glColor3d(1,0,1);
+    out_of_bounds_x(cx1, cv1);
+    out_of_bounds_y(cy1, cv1);
     DrawCircle(cx9,cy9,cs9);
     
     glColor3d(0,1,1);
+    out_of_bounds_x(cx1, cv1);
+    out_of_bounds_y(cy1, cv1);
     DrawCircle(cx10,cy10,cs10);
+    
     
 
     glutPostRedisplay();
