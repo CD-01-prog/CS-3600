@@ -32,6 +32,47 @@ double gX = 200;
 double gY = 200;
 double gDX = 0.1;
 double gDY = 0.07;
+// very bad next assignment just make a class it will be easier i mean like that is what all classes teach me to do
+double cx1 = 50;
+double cy1 = 50;
+double cs1 = 20;
+double cv1 = 1;
+double cx2 = 500;
+double cy2 = 505;
+double cs2 = 20;
+double cv2 = 1;
+double cx3 = 650;
+double cy3 = 650;
+double cs3 = 20;
+double cv3 = 1;
+double cx4 = 300;
+double cy4 = 350;
+double cs4 = 20;
+double cv4 = 1;
+double cx5 = 225;
+double cy5 = 40;
+double cs5 = 20;
+double cv5 = 1;
+double cx6 = 195;
+double cy6 = 525;
+double cs6 = 20;
+double cv6 = 1;
+double cx7 = 590;
+double cy7 = 75;
+double cs7 = 20;
+double cv7 = 1;
+double cx8 = 175;
+double cy8 = 30;
+double cs8 = 20;
+double cv8 = 1;
+double cx9 = 30;
+double cy9 = 425;
+double cs9 = 20;
+double cv9 = 1;
+double cx10 = 180;
+double cy10 = 180;
+double cs10 = 20;
+double cv10 = 1;
 
 //
 // Functions that draw basic primitives
@@ -113,42 +154,61 @@ void display(void)
     // Delete these when you get your code working.
     glColor3d(0,0,1);
     DrawRectangle(gX, gY, gX+ size, gY+ size);
-//should be able to make this just a loop with random values
+//should be able to make this just a loop with random values seems i can also make a class that holds all of this
+    
+    
     glColor3d(0,0,1);
-    DrawCircle(50,50,20);
+    DrawCircle(cx1,cy1,cs1);
     
     glColor3d(0.2,0.7,0.3);
-    DrawCircle(500,505,20);
+    DrawCircle(cx2,cy2,cs2);
     
     glColor3d(0,0,0);
-    DrawCircle(650,650,20);
+    DrawCircle(cx3,cy3,cs3);
     
     glColor3d(0.5,0.1,1);
-    DrawCircle(300,350,20);
+    DrawCircle(cx4,cy4,cs4);
     
     glColor3d(0.8,0.2,1);
-    DrawCircle(225,40,20);
+    DrawCircle(cx5,cy5,cs5);
     
     glColor3d(0,0,5);
-    DrawCircle(195,525,20);
+    DrawCircle(cx6,cy6,cs6);
     
     glColor3d(0.9,0.77,0.2);
-    DrawCircle(590,75,20);
+    DrawCircle(cx7,cy7,cs7);
     
     glColor3d(0,0,0);
-    DrawCircle(175,30,20);
+    DrawCircle(cx8,cy8,cs8);
     
     glColor3d(1,0,1);
-    DrawCircle(30,425,20);
+    DrawCircle(cx9,cy9,cs9);
     
     glColor3d(0,1,1);
-    DrawCircle(180,180,20);
+    DrawCircle(cx10,cy10,cs10);
     
 
     glutPostRedisplay();
     glutSwapBuffers();
 }
-
+double out_of_bounds_x(double gX, double gDX){
+    double size = 50;
+    if (gX + gDX + size > screen_x)
+        gDX = -gDX;
+    if (gX + gDX < 0)
+        gDX = -gDX;
+    gX += gDX;
+    return gX;
+}
+double out_of_bounds_y(double gY, double gDY){
+    double size = 50;
+    if (gY + gDY + size > screen_y)
+        gDY = -gDY;
+    if (gY + gDY < 0)
+        gDY = -gDY;
+    gY += gDY;
+    return gY;
+}
 
 // This callback function gets called by the Glut
 // system whenever a key is pressed.
