@@ -1,3 +1,4 @@
+//
 //  main.cpp
 //  Prog2
 //
@@ -21,122 +22,14 @@
 #include <cmath>
 #include <cstring>
 #include <cstdlib>
+#include <vector>
 #include <GLUT/glut.h>
 
 
 // Global Variables (Only what you need!)
 double screen_x = 700;
 double screen_y = 700;
-double gX = 200;
-double gY = 200;
-double gDX = 0.1;
-double gDY = 0.07;
-// very bad next assignment just make a class it will be easier i mean like that is what all classes teach me to do
-class circle{
-    public:
-    circle();
-    circle(double x,double y,double radius,double r,double g,double b, double dx, double dy);
-    
-    double getx() {return x;}
-    void setx(double nx) {x = nx;}
-    double gety() {return y;}
-    void sety(double ny) {y = ny;}
-    double getradius() {return radius;}
-    void setradius(double nradius) {radius = nradius;}
-    
-    double getr() {return r;};
-    void setr(double nr) {r = nr;}
-    double getg() {return g;};
-    void setg(double ng) {g = ng;}
-    double getb() {return b;};
-    void setb(double nb) {b = nb;}
-    
-    double getdx() {return xDir;}
-    double getdy() {return yDir;}
-    double getnextx() { return x + xDir; }
-    double getnexty() { return y + yDir; }
-
-    void setdx(double dx) { xDir = dx; }
-    void setdy(double dy) { yDir = dy; }
-
-    void step(int myself, circle all[], int count);
-    private:
-    double x,y,radius;
-    double xDir, yDir;
-    double r,g,b;
-    };
-circle::circle(double x, double y, double radius, double r, double g, double b, double dx, double dy){
-    x = x;
-    y = y;
-    radius = radius;
-    r = r;
-    g = g;
-    b = b;
-    xDir = dx;
-    yDir = dy;
-}
-    
-/*
-double cx1 = 50;
-double cy1 = 50;
-double cs1 = 20;
-double cvx1 = 50;
-double cvy1 = 50;
-
-double cx2 = 500;
-double cy2 = 505;
-double cs2 = 10;
-double cvx2 = 5;
-double cvy2 = 1;
-
-double cx3 = 650;
-double cy3 = 650;
-double cs3 = 40;
-double cvx3 = 1;
-double cvy3 = 5;
-
-double cx4 = 300;
-double cy4 = 350;
-double cs4 = 24;
-double cvx4 = 0.89;
-double cvy4 = 1;
-
-double cx5 = 225;
-double cy5 = 40;
-double cs5 = 36;
-double cvx5 = 1;
-double cvy5 = 0.89;
-
-double cx6 = 195;
-double cy6 = 525;
-double cs6 = 42;
-double cvx6 = 10;
-double cvy6 = 5;
-
-double cx7 = 590;
-double cy7 = 75;
-double cs7 = 15;
-double cvx7 = 7;
-double cvy7 = 5;
-
-double cx8 = 175;
-double cy8 = 30;
-double cs8 = 9;
-double cvx8 = 4;
-double cvy8 = 9;
-
-double cx9 = 30;
-double cy9 = 425;
-double cs9 = 30;
-double cvx9 = 4;
-double cvy9 = 4;
-
-double cx10 = 180;
-double cy10 = 180;
-double cs10 = 28;
-double cvx10 = 1;
-double cvy10 = 1;
-*/
+vector Circles<Circle>;
 
 //
 // Functions that draw basic primitives
@@ -153,6 +46,60 @@ void DrawCircle(double x1, double y1, double radius)
     }
     glEnd();
 }
+
+class Circle{
+private:
+    double cx;// circle x
+    double cy;// circle y
+    double cvx;// circle velocity x
+    double cvy;// circle velocity y
+    double cs;// circle size
+public:
+    Circle();
+    Circle(double x,double y,double r,double g,double b,double vx,double vy,double cs)
+    updatepostion()
+    getCX(){return cx}
+    getCY(){return cy}
+    getCVX(){return cvx}
+    getCVY(){return cvy}
+    getCS(){return cs}
+    setCX(x)
+    setCY(y)
+    setCVX(vx){return cvx = vx}
+    setCVY(vy){return cvy = vy}
+    setCS(s){return cs = s}
+    
+}
+Circle::Circle(){
+    cx = 0;
+    cy = 0;
+    cvx = 0;
+    cvy = 0;
+    cs = 10;
+}
+Circle::updatepostion(){
+    if (cx + cvx + cs > screen_x)
+        cvx = -cvx;
+    if (cx + cvx < cs)
+        cvx = -cvx;
+    cx += cvx;
+    if (cy + cvy + cs > screen_y)
+        cvy = -cvy;
+    if (cy + cvy < cs)
+        cvy = -cvy;
+    cy += cvy;
+}
+Circle::Circle(double x,double y,double r,double g,double b,double vx,double vy,double s){
+    cx = x;
+    cy = y;
+    cvx = vx;
+    cvy = vy;
+    cs = s;
+    glColor3d(r,g,b);
+    DrawCircle(x,y,s);
+ }
+
+
 
 void DrawRectangle(double x1, double y1, double x2, double y2)
 {
@@ -202,25 +149,11 @@ void DrawText(double x, double y, char *string)
 void display(void)
 {
     glClear(GL_COLOR_BUFFER_BIT);
-    circle(50,50,20,0,0,1,1,1);
-    /*
-    double size = 50;
-    if (gX + gDX + size > screen_x)
-        gDX = -gDX;
-    if (gX + gDX < 0)
-        gDX = -gDX;
-    if (gY + gDY + size > screen_y)
-        gDY = -gDY;
-    if (gY + gDY < 0)
-        gDY = -gDY;
-    gX += gDX;
-    gY += gDY;
-*/
-    // Test lines that draw all three shapes and some text.
-    // Delete these when you get your code working.
-    //glColor3d(0,0,1);
-    //DrawRectangle(gX, gY, gX+ size, gY+ size);
-
+    
+    for (int i=0;i<11;i++){
+        Circles[i].updatepostion()
+    }
+    
     glutPostRedisplay();
     glutSwapBuffers();
 }
@@ -286,6 +219,23 @@ void mouse(int mouse_button, int state, int x, int y)
 // Your initialization code goes here.
 void InitializeMyStuff()
 {
+    //x , y, r, g, b , vx, vy, s
+    Circle c1 = Circle(50,50,0,0,1,50,50,20);
+    Circle c2 = Circle(500,505,.2,.7,.3,5,1,10);
+    Circle c3 = Circle(650,650,0,0,0,1,5,40);
+    Circle c4 = Circle(300,350,.5,.1,1,.89,1,24);
+    Circle c5 = Circle(225,40,.8,.2,1,1,.89,36);
+    Circle c6 = Circle(195,525,0,0,5,10,5,42);
+    Circle c7 = Circle(590,75,.9,.77,.2,7,5,15);
+    Circle c8 = Circle(175,30,0,0,0,4,9,9);
+    Circle c9 = Circle(30,425,1,0,1,4,4,30);
+    Circle c10 = Circle(180,180,0,1,1,1,1,28);
+    Circles[].append(c1,c2,c3,c4,c5,c6,c7,c8,c9,c10)
+    /*
+     for(int i=0;i<11;i++){
+        
+     }
+     */
 }
 
 
