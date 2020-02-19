@@ -189,7 +189,8 @@ void display(void)
     {
         glEnable(GL_DEPTH_TEST);
         glLoadIdentity();
-        gluLookAt(x, y, .25, x+1, y-.01, 0, 0, 0, 1);
+        // camera is not good is locked by position need to find out how to get it to rotate with degrees
+        gluLookAt(x, y, .5, x+1, y+1, 0, 0, 0, 1);
     }
 
     glutSwapBuffers();
