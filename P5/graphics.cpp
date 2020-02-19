@@ -13,6 +13,7 @@
 
 #include <cmath>
 #include <cstring>
+#include <iostream>
 //#include <cstdlib>
 #include <GLUT/glut.h>
 #include "graphics.h"
@@ -27,6 +28,8 @@ Maze gMaze;
 
 bool gLeftButtonDown = false;
 bool gMiddleButtonDown = false;
+bool grightButtonDown = false;
+bool gDownButtonDown = false;
 
 
 viewtype current_view = perspective_view;
@@ -114,12 +117,24 @@ void display(void)
         glLoadIdentity();
         gluLookAt(3.5, -3, 7, 3, 3, 0, 0, 0, 1);
     }
-
+    if (current_view == top_view)
+    {
+        glEnable(GL_DEPTH_TEST);
+        glLoadIdentity();
+        gluLookAt(3, 3, 10, 3, 3, 0, 0, 1, 0);
+    }
     // Update Rat:
     if (gLeftButtonDown == true)
     {
         //gRat.SpinLeft();
-        degrees += .05;
+        degrees += .05 * 30;
+        gLeftButtonDown = false;
+    }
+    if (grightButtonDown == true)
+    {
+        //gRat.SpinRight();
+        degrees -= .05 * 30;
+        grightButtonDown = false;
     }
     if (gMiddleButtonDown == true)
     {
@@ -130,12 +145,30 @@ void display(void)
         double SPEED = .001;
 //        if (pMaze->IsSafe(x + dx * SPEED, y + dy * SPEED, fat))
         {
-            x += dx * SPEED;
-            y += dy * SPEED;
+            x += dx * SPEED * 30;
+            y += dy * SPEED * 30;
+            
         }
 //        else if
 
 //        else if
+        gMiddleButtonDown = false;
+    }
+    if (gDownButtonDown == true)
+    {
+        //gRat.ScurryBackward();
+        double radians = degrees * 3.1415926 / 180.;
+        double dx = std::cos(radians);
+        double dy = std::sin(radians);
+        double SPEED = .001;
+        // if (pMaze -> isSafe(x+dx*speed,y+dy*speed,fat))
+        {
+            x -= dx * SPEED * 30;
+            y -= dy * SPEED * 30;
+        }
+        //else if
+        // else if
+        gDownButtonDown = false;
     }
 
     glColor3ub(100,100,255);
@@ -152,6 +185,12 @@ void display(void)
         DrawTriangle(.5, 0, -.3, .2, -.3, -.2);
         glPopMatrix();
     }
+    if (current_view == rat_view)
+    {
+        glEnable(GL_DEPTH_TEST);
+        glLoadIdentity();
+        gluLookAt(x, y, .25, x+1, y-.01, 0, 0, 0, 1);
+    }
 
     glutSwapBuffers();
     glutPostRedisplay();
@@ -167,8 +206,31 @@ void keyboard(unsigned char c, int x, int y)
         case 27: // escape character means to quit the program
             //exit (0);
             break;
-        case 'b':
-            // do something when 'b' character is hit.
+        case 't':
+            // set to top view
+            current_view = top_view;
+            break;
+        case 'r':
+            current_view = rat_view;
+            break;
+        case 'p':
+            current_view = perspective_view;
+            break;
+        case 'a':
+            //rotate left
+            gLeftButtonDown = !gLeftButtonDown;
+            break;
+        case 's':
+            //move back
+            gDownButtonDown = !gDownButtonDown;
+            break;
+        case 'd':
+            //rotate right
+            grightButtonDown = !grightButtonDown;
+            break;
+        case 'w':
+            //move forward
+            gMiddleButtonDown = !gMiddleButtonDown;
             break;
         default:
             return; // if we don't care, return without glutPostRedisplay()
@@ -242,6 +304,7 @@ void mouse(int mouse_button, int state, int x, int y)
     {
         gMiddleButtonDown = false;
     }
+    
     glutPostRedisplay();
 }
 
@@ -283,3 +346,4 @@ int main(int argc, char **argv)
 
     return 0;
 }
+
