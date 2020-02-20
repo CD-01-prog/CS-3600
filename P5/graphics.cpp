@@ -18,6 +18,7 @@
 #include <GLUT/glut.h>
 #include "graphics.h"
 #include "maze.h"
+#include "Rat.hpp"
 
 
 // Global Variables (Only what you need!)
@@ -34,10 +35,12 @@ bool gDownButtonDown = false;
 
 viewtype current_view = perspective_view;
 
+Rat rat = Rat();
+/* moved to rat class
 double x = 2.5;
 double y = .5;
 double degrees = 90;
-
+*/
 //
 // Functions that draw basic primitives
 //
@@ -126,48 +129,22 @@ void display(void)
     // Update Rat:
     if (gLeftButtonDown == true)
     {
-        //gRat.SpinLeft();
-        degrees += .05 * 30;
+        rat.SpinLeft();
         gLeftButtonDown = false;
     }
     if (grightButtonDown == true)
     {
-        //gRat.SpinRight();
-        degrees -= .05 * 30;
+        rat.SpinRight();
         grightButtonDown = false;
     }
     if (gMiddleButtonDown == true)
     {
-        //gRat.ScurryForward();
-        double radians = degrees * 3.1415926 / 180.;
-        double dx = std::cos(radians);
-        double dy = std::sin(radians);
-        double SPEED = .001;
-//        if (pMaze->IsSafe(x + dx * SPEED, y + dy * SPEED, fat))
-        {
-            x += dx * SPEED * 30;
-            y += dy * SPEED * 30;
-            
-        }
-//        else if
-
-//        else if
+        rat.ScurryForward();
         gMiddleButtonDown = false;
     }
     if (gDownButtonDown == true)
     {
-        //gRat.ScurryBackward();
-        double radians = degrees * 3.1415926 / 180.;
-        double dx = std::cos(radians);
-        double dy = std::sin(radians);
-        double SPEED = .001;
-        // if (pMaze -> isSafe(x+dx*speed,y+dy*speed,fat))
-        {
-            x -= dx * SPEED * 30;
-            y -= dy * SPEED * 30;
-        }
-        //else if
-        // else if
+        rat.ScurryBackward();
         gDownButtonDown = false;
     }
 
@@ -178,19 +155,11 @@ void display(void)
     //gRat.Draw();
     if (current_view != rat_view)
     {
-        glPushMatrix();
-        glTranslated(x, y, 0);
-        glRotated(degrees, 0, 0, 1);
-        glScaled(.5, .5, 1.0);
-        DrawTriangle(.5, 0, -.3, .2, -.3, -.2);
-        glPopMatrix();
+        rat.Draw();
     }
     if (current_view == rat_view)
     {
-        glEnable(GL_DEPTH_TEST);
-        glLoadIdentity();
-        // camera is not good is locked by position need to find out how to get it to rotate with degrees
-        gluLookAt(x, y, .5, x+1, y+1, 0, 0, 0, 1);
+        rat.RatView();
     }
 
     glutSwapBuffers();
@@ -312,6 +281,7 @@ void mouse(int mouse_button, int state, int x, int y)
 // Your initialization code goes here.
 void InitializeMyStuff()
 {
+    //gMaze.Draw();
 }
 
 
