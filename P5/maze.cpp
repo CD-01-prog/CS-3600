@@ -110,13 +110,12 @@ void Maze::RemoveWallsR(int i, int j)
         if (i - 1 >= 0 && !cells[i - 1][j].visited)
         {
             moves.push_back(LEFT);
-        }
-        // still need to fix
-        if (i && !cells[i][j].visited)
+        }/*
+        if (i + 1 <= 1 && !cells[i+1][j].visited)
         {
             moves.push_back(RIGHT);
         }
-        if (j && !cells[i][j].visited)
+        if (j + 1  <= 1 && !cells[i][j+1].visited)
         {
             moves.push_back(UP);
         }
@@ -124,7 +123,7 @@ void Maze::RemoveWallsR(int i, int j)
         {
             moves.push_back(DOWN);
         }
-
+*/
         if (moves.size() == 0)
         {
             return;
@@ -138,7 +137,7 @@ void Maze::RemoveWallsR(int i, int j)
             cells[i][j].left = false;
             cells[i - 1][j].right = false;
             RemoveWallsR(i - 1, j);
-        }
+        }/*
         if (moves[r] == RIGHT)
         {
             cells[i-1][j].right = false;
@@ -156,7 +155,7 @@ void Maze::RemoveWallsR(int i, int j)
             cells[i][j].bottom = false;
             cells[i][j-1].top = false;
             RemoveWallsR(i, j-1);
-        }
+        }*/
 
     }
 
