@@ -111,11 +111,11 @@ void Maze::RemoveWallsR(int i, int j)
         {
             moves.push_back(LEFT);
         }/*
-        if (i + 1 <= 1 && !cells[i+1][j].visited)
+        if (i <= 1 && !cells[i+1][j].visited)
         {
             moves.push_back(RIGHT);
         }
-        if (j + 1  <= 1 && !cells[i][j+1].visited)
+        if (j <= 1 && !cells[i][j+1].visited)
         {
             moves.push_back(UP);
         }
@@ -167,4 +167,43 @@ void Maze::Draw()
         for (int j = 0; j < HEIGHT; j++)
             cells[i][j].Draw(i, j);
     RemoveWalls();
+}
+// gets stuck in wall since angle affects dx and dy
+bool Maze::IsSafe(double x,double y, double r){
+    x -= (int)x;
+    y -= (int)y;
+    // need to tell if a wall is there or not first then test to see if it crosses the wall
+        //left wall
+    if(x - r <= 0){
+        return false;
+    }
+        //right wall
+    if(x + r >= 1){
+        return false;
+    }
+        //top wall
+    if(y + r >= 1){
+        return false;
+    }
+        //bottom wall
+    if(y-r <= 0){
+        return false;
+    }
+        //topleft corner
+    if(x-r <= 0.05 and y+r >= .95){
+        return false;
+    }
+        //top right corner
+    if(x+r >= .95 and y+r >= .95){
+        return false;
+    }
+        //bottom left corner
+    if(x-r <= .05 and y-r <= .05){
+        return false;
+    }
+        //bottom right corner
+    if(x+r >= .95 and y-r <= .05){
+        return false;
+    }
+    return true;
 }
