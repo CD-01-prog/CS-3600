@@ -1,3 +1,13 @@
+//
+//  main.cpp
+//  House_test
+//
+//  Created by Caleb J. Delaney on 2/21/20.
+//  Copyright © 2020 Caleb J. Delaney. All rights reserved.
+//
+
+#include <cmath>
+#include <cstring>
 #include <iostream>
 
 #include <GLUT/GLUT.h>
@@ -53,87 +63,76 @@ void display(void)
     glLoadIdentity();
     
     //looking
-    //gluLookAt(-100, -500, 500, 0, 0, 0, 0, 0, 1);
+    gluLookAt(-100, -500, 500, 0, 0, 0, 0, 0, 1);
     //set up the grass
     glColor3d(0.0,0.99,0.0);
     DrawCircle(0,0,250);
     
     //floor
     glColor3d(0.0, 0.0, .99);
-    DrawRectangle(0,0,200,100);
+    //DrawRectangle(0,0,200,100);
     
     //set up the walls
     //left
     DrawLine(0, 0, 0, 100);
-    {
-        glColor3d(0.0, 0.0, .99);
-        glBegin(GL_QUADS);
-        glVertex3i(0, 0, 0);
-        glVertex3i(0, 100, 0);
-        glVertex3i(0, 100, 20);
-        glVertex3i(0, 0, 20);
-        glEnd();
-    }
+    glColor3d(0.0, 0.0, .99);
+    glBegin(GL_QUADS);
+    glVertex3i(0, 0, 0);
+    glVertex3i(0, 100, 0);
+    glVertex3i(0, 100, 20);
+    glVertex3i(0, 0, 20);
+    glEnd();
     //right
     DrawLine(200,0, 200, 100);
-    {
-        glColor3d(0.0, 0.0, .99);
-        glBegin(GL_QUADS);
-        glVertex3i(200, 0, 0);
-        glVertex3i(200, 100, 0);
-        glVertex3i(200, 100, 20);
-        glVertex3i(200, 0, 20);
-        glEnd();
-    }
+    glColor3d(0.0, 0.0, .99);
+    glBegin(GL_QUADS);
+    glVertex3i(200, 0, 0);
+    glVertex3i(200, 100, 0);
+    glVertex3i(200, 100, 20);
+    glVertex3i(200, 0, 20);
+    glEnd();
     
     //back
     DrawLine(0,100,200,100);
-    {
-        glColor3d(0.0, 0.0, .99);
-        glBegin(GL_QUADS);
-        glVertex3i(0, 100, 0);
-        glVertex3i(200, 100, 0);
-        glVertex3i(200, 100, 20);
-        glVertex3i(0, 100, 20);
-        glEnd();
-    }
+    glColor3d(0.0, 0.0, .99);
+    glBegin(GL_QUADS);
+    glVertex3i(0, 100, 0);
+    glVertex3i(200, 100, 0);
+    glVertex3i(200, 100, 20);
+    glVertex3i(0, 100, 20);
+    glEnd();
     
     //front
     DrawLine(0,0,200,0);
-    {
-        glColor3d(0.0, 0.0, .99);
-        glBegin(GL_QUADS);
-        glVertex3i(0, 0, 0);
-        glVertex3i(200, 0, 0);
-        glVertex3i(200, 0, 20);
-        glVertex3i(0, 0, 20);
-        glEnd();
-    }
-    
+    glColor3d(0.0, 0.0, .99);
+    glBegin(GL_QUADS);
+    glVertex3i(0, 0, 0);
+    glVertex3i(200, 0, 0);
+    glVertex3i(200, 0, 20);
+    glVertex3i(0, 0, 20);
+    glEnd();
+
     //set up the roof
     
     //left side
+    glColor3d(.99,0,0);
     
-    {
-        glColor3d(.99,0,0);
-        glBegin(GL_QUADS);
-        glVertex3i(0,0,20);
-        glVertex3i(0,100,20);
-        glVertex3i(100,100,20);
-        glVertex3i(0,100,20);
-        glEnd();
-    }
+    glColor3d(.99,0,0);
+    glBegin(GL_QUADS);
+    glVertex3i(0,0,20);
+    glVertex3i(0,100,20);
+    glVertex3i(100,100,50);
+    glVertex3i(0,100,50);
+    glEnd();
     //right side
-    {
-        glColor3d(.99,0,0);
-        glBegin(GL_QUADS);
-        glVertex3i(100,100,20);
-        glVertex3i(200,100,20);
-        glVertex3i(200,0,20);
-        glVertex3i(100,0,20);
-        glEnd();
+    glColor3d(.99,0,0);
+    glBegin(GL_QUADS);
+    glVertex3i(100,100,50);
+    glVertex3i(200,100,50);
+    glVertex3i(200,0,20);
+    glVertex3i(100,0,20);
+    glEnd();
 
-    }
     glutSwapBuffers();
     glutPostRedisplay();}
 
@@ -156,23 +155,28 @@ void keyboard(unsigned char c, int x, int y)
 
     glutPostRedisplay();
 }
-// This callback function gets called by the Glut
-// system whenever the window is resized by the user.
-void reshape(int w, int h)
+void SetPerspectiveView(int w, int h)
 {
-    // Reset our global variables to the new width and height.
-    screen_x = w;
-    screen_y = h;
-
-    // Set the pixel resolution of the final picture (Screen coordinates).
-    glViewport(0, 0, w, h);
-
-    // Set the projection mode to 2D orthographic, and set the world coordinates:
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(0, w, 0, h);
+    double aspectRatio = (GLdouble) w/(GLdouble) h;
+    gluPerspective(
+    /* field of view in degree */ 38.0,
+    /* aspect ratio */ aspectRatio,
+    /* Z near */ .1, /* Z far */ 3000.0);
     glMatrixMode(GL_MODELVIEW);
-
+}
+// This callback function gets called by the Glut
+// system whenever the window is resized by the user.
+// reshape:
+void reshape(int w, int h)
+{
+    screen_x = w;
+    screen_y = h;
+    glViewport(0, 0, w, h);
+    
+    SetPerspectiveView(w,h);
+    
 }
 
 // This callback function gets called by the Glut
@@ -215,7 +219,7 @@ int main(int argc, char **argv)
     }
     else
     {
-        glutCreateWindow("This appears in the title bar");
+        glutCreateWindow("a house");
     }
 
     glutDisplayFunc(display);
