@@ -139,12 +139,14 @@ void display(void)
     }
     if (gMiddleButtonDown == true)
     {
-        rat.ScurryForward();
+        if (gMaze.IsSafe(rat.Getx()+rat.Getdx()*rat.GetSpeed(),rat.Gety()+rat.Getdy()*rat.GetSpeed(),rat.Getsize())){
+            rat.ScurryForward();}
         gMiddleButtonDown = false;
     }
     if (gDownButtonDown == true)
     {
-        rat.ScurryBackward();
+        if (gMaze.IsSafe(rat.Getx()-rat.Getdx()*rat.GetSpeed(),rat.Gety()-rat.Getdy()*rat.GetSpeed(),rat.Getsize())){
+            rat.ScurryBackward();}
         gDownButtonDown = false;
     }
 
@@ -163,49 +165,6 @@ void display(void)
     }
 
     glutSwapBuffers();
-    glutPostRedisplay();
-}
-
-
-// This callback function gets called by the Glut
-// system whenever a key is pressed.
-void keyboard(unsigned char c, int x, int y)
-{
-    switch (c)
-    {
-        case 27: // escape character means to quit the program
-            //exit (0);
-            break;
-        case 't':
-            // set to top view
-            current_view = top_view;
-            break;
-        case 'r':
-            current_view = rat_view;
-            break;
-        case 'p':
-            current_view = perspective_view;
-            break;
-        case 'a':
-            //rotate left
-            gLeftButtonDown = !gLeftButtonDown;
-            break;
-        case 's':
-            //move back
-            gDownButtonDown = !gDownButtonDown;
-            break;
-        case 'd':
-            //rotate right
-            grightButtonDown = !grightButtonDown;
-            break;
-        case 'w':
-            //move forward
-            gMiddleButtonDown = !gMiddleButtonDown;
-            break;
-        default:
-            return; // if we don't care, return without glutPostRedisplay()
-    }
-
     glutPostRedisplay();
 }
 
@@ -230,6 +189,51 @@ void SetPerspectiveView(int w, int h)
         /* aspect ratio */ aspectRatio,
         /* Z near */ .1, /* Z far */ 30.0);
     glMatrixMode(GL_MODELVIEW);
+}
+
+
+// This callback function gets called by the Glut
+// system whenever a key is pressed.
+void keyboard(unsigned char c, int x, int y)
+{
+    switch (c)
+    {
+        case 27: // escape character means to quit the program
+            exit(0);
+            break;
+        case 't':
+            // set to top view
+            current_view = top_view;
+            //SetTopView(screen_x, screen_y);
+            break;
+        case 'r':
+            current_view = rat_view;
+            break;
+        case 'p':
+            current_view = perspective_view;
+            //SetPerspectiveView(screen_x, screen_y);
+            break;
+        case 'a':
+            //rotate left
+            gLeftButtonDown = !gLeftButtonDown;
+            break;
+        case 's':
+            //move back
+            gDownButtonDown = !gDownButtonDown;
+            break;
+        case 'd':
+            //rotate right
+            grightButtonDown = !grightButtonDown;
+            break;
+        case 'w':
+            //move forward
+            gMiddleButtonDown = !gMiddleButtonDown;
+            break;
+        default:
+            return; // if we don't care, return without glutPostRedisplay()
+    }
+
+    glutPostRedisplay();
 }
 
 // This callback function gets called by the Glut
