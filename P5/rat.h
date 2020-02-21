@@ -14,6 +14,13 @@ class Rat
 {
 public:
     Rat();
+    double Getx(){return x;};
+    double Gety(){return y;};
+    double Getdegrees(){return degrees;};
+    double Getdx(){return dx;};
+    double Getdy(){return dy;};
+    double GetSpeed(){return Speed;};
+    double Getsize(){return size;};
     void SpinLeft();
     void SpinRight();
     void ScurryForward();
@@ -24,6 +31,10 @@ private:
     double x;
     double y;
     double degrees;
+    double dx;
+    double dy;
+    double Speed;
+    double size;
 };
 
 #endif /* Rat_hpp */
