@@ -54,9 +54,9 @@ private:
     double cvx;// circle velocity x
     double cvy;// circle velocity y
     double cs;// circle size
-    double r;// red
-    double g;// green
-    double b;// blue
+    double cr;// red
+    double cg;// green
+    double cb;// blue
 public:
     Circle();
     Circle(double x,double y,double r,double g,double b,double vx,double vy,double cs);
@@ -66,17 +66,17 @@ public:
     double getCVX(){return cvx;}
     double getCVY(){return cvy;}
     double getCS(){return cs;}
-    double getR(){return r;}
-    double getB(){return b;}
-    double getG(){return g;}
+    double getR(){return cr;}
+    double getB(){return cb;}
+    double getG(){return cg;}
     void setCX(double x){cx = x;}
     void setCY(double y){cy = y;}
     void setCVX(double vx){cvx = vx;}
     void setCVY(double vy){cvy = vy;}
     void setCS(double s){cs = s;}
-    void setR(double nr){r = nr;}
-    void setB(double nb){b = nb;}
-    void setG(double ng){g = ng;}
+    void setR(double nr){cr = nr;}
+    void setB(double nb){cb = nb;}
+    void setG(double ng){cg = ng;}
     
 };
 Circle::Circle(){
@@ -97,7 +97,7 @@ void Circle::updatepostion(){
     if (cy + cvy < cs)
         cvy = -cvy;
     cy += cvy;
-    glColor3d(r,g,b);
+    glColor3d(cr,cg,cb);
     DrawCircle(cx,cy,cs);
 }
 Circle::Circle(double x,double y,double r,double g,double b,double vx,double vy,double s){
@@ -106,10 +106,10 @@ Circle::Circle(double x,double y,double r,double g,double b,double vx,double vy,
     cvx = vx;
     cvy = vy;
     cs = s;
-    r = r;
-    b = b;
-    g = b;
-    glColor3d(r,g,b);
+    cr = r;
+    cb = b;
+    cg = b;
+    glColor3d(cr,cg,cb);
     DrawCircle(x,y,s);
  }
 std::vector<Circle> map;
@@ -236,12 +236,12 @@ void InitializeMyStuff()
     //x , y, r, g, b , vx, vy, s
     Circle c1 = Circle(50,50,0,0,1,50,50,20);
     Circle c2 = Circle(500,505,.2,.7,.3,5,1,10);
-    Circle c3 = Circle(650,650,0,0,0,1,5,40);
+    Circle c3 = Circle(650,650,1,0,0,1,5,40);
     Circle c4 = Circle(300,350,.5,.1,1,.89,1,24);
     Circle c5 = Circle(225,40,.8,.2,1,1,.89,36);
     Circle c6 = Circle(195,525,0,0,5,10,5,42);
     Circle c7 = Circle(590,75,.9,.77,.2,7,5,15);
-    Circle c8 = Circle(175,30,0,0,0,4,9,9);
+    Circle c8 = Circle(175,30,0,1,0,4,9,9);
     Circle c9 = Circle(30,425,1,0,1,4,4,30);
     Circle c10 = Circle(180,180,0,1,1,1,1,28);
     map.push_back(c1);
