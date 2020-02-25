@@ -29,7 +29,6 @@
 // Global Variables (Only what you need!)
 double screen_x = 700;
 double screen_y = 700;
-vector Circles<Circle>;
 
 //
 // Functions that draw basic primitives
@@ -47,29 +46,39 @@ void DrawCircle(double x1, double y1, double radius)
     glEnd();
 }
 
-class Circle{
+class Circle
+{
 private:
     double cx;// circle x
     double cy;// circle y
     double cvx;// circle velocity x
     double cvy;// circle velocity y
     double cs;// circle size
+    double r;// red
+    double g;// green
+    double b;// blue
 public:
     Circle();
-    Circle(double x,double y,double r,double g,double b,double vx,double vy,double cs)
-    updatepostion()
-    getCX(){return cx}
-    getCY(){return cy}
-    getCVX(){return cvx}
-    getCVY(){return cvy}
-    getCS(){return cs}
-    setCX(x)
-    setCY(y)
-    setCVX(vx){return cvx = vx}
-    setCVY(vy){return cvy = vy}
-    setCS(s){return cs = s}
+    Circle(double x,double y,double r,double g,double b,double vx,double vy,double cs);
+    void updatepostion();
+    double getCX(){return cx;}
+    double getCY(){return cy;}
+    double getCVX(){return cvx;}
+    double getCVY(){return cvy;}
+    double getCS(){return cs;}
+    double getR(){return r;}
+    double getB(){return b;}
+    double getG(){return g;}
+    void setCX(double x){cx = x;}
+    void setCY(double y){cy = y;}
+    void setCVX(double vx){cvx = vx;}
+    void setCVY(double vy){cvy = vy;}
+    void setCS(double s){cs = s;}
+    void setR(double nr){r = nr;}
+    void setB(double nb){b = nb;}
+    void setG(double ng){g = ng;}
     
-}
+};
 Circle::Circle(){
     cx = 0;
     cy = 0;
@@ -77,7 +86,7 @@ Circle::Circle(){
     cvy = 0;
     cs = 10;
 }
-Circle::updatepostion(){
+void Circle::updatepostion(){
     if (cx + cvx + cs > screen_x)
         cvx = -cvx;
     if (cx + cvx < cs)
@@ -88,6 +97,8 @@ Circle::updatepostion(){
     if (cy + cvy < cs)
         cvy = -cvy;
     cy += cvy;
+    glColor3d(r,g,b);
+    DrawCircle(cx,cy,cs);
 }
 Circle::Circle(double x,double y,double r,double g,double b,double vx,double vy,double s){
     cx = x;
@@ -95,11 +106,13 @@ Circle::Circle(double x,double y,double r,double g,double b,double vx,double vy,
     cvx = vx;
     cvy = vy;
     cs = s;
+    r = r;
+    b = b;
+    g = b;
     glColor3d(r,g,b);
     DrawCircle(x,y,s);
  }
-
-
+std::vector<Circle> map;
 
 void DrawRectangle(double x1, double y1, double x2, double y2)
 {
@@ -151,7 +164,8 @@ void display(void)
     glClear(GL_COLOR_BUFFER_BIT);
     
     for (int i=0;i<11;i++){
-        Circles[i].updatepostion()
+        map[i].updatepostion();
+
     }
     
     glutPostRedisplay();
@@ -230,7 +244,18 @@ void InitializeMyStuff()
     Circle c8 = Circle(175,30,0,0,0,4,9,9);
     Circle c9 = Circle(30,425,1,0,1,4,4,30);
     Circle c10 = Circle(180,180,0,1,1,1,1,28);
-    Circles[].append(c1,c2,c3,c4,c5,c6,c7,c8,c9,c10)
+    map.push_back(c1);
+    map.push_back(c2);
+    map.push_back(c3);
+    map.push_back(c4);
+    map.push_back(c5);
+    map.push_back(c4);
+    map.push_back(c5);
+    map.push_back(c6);
+    map.push_back(c7);
+    map.push_back(c8);
+    map.push_back(c9);
+    map.push_back(c10);
     /*
      for(int i=0;i<11;i++){
         
