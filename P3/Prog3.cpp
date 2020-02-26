@@ -30,6 +30,7 @@
 double screen_x = 700;
 double screen_y = 700;
 const double COLLISION_FRICTION = 1.0;
+const double Gavity = .1;
 
 //
 // Functions that draw basic primitives
@@ -94,12 +95,12 @@ void Circle::updatepostion(){
         cvx = -cvx;
     if (cx + cvx < cs)
         cvx = -cvx;
-    cx += cvx;
+    cx += cvx*Gavity;
     if (cy + cvy + cs > screen_y)
         cvy = -cvy;
     if (cy + cvy < cs)
         cvy = -cvy;
-    cy += cvy;
+    cy += cvy*Gavity;
     glColor3d(cr,cg,cb);
     DrawCircle(cx,cy,cs);
 }
@@ -241,7 +242,7 @@ void display(void)
     glClear(GL_COLOR_BUFFER_BIT);
     
     for (int i=0;i<12;i++){
-        for(int j=11; j>i;j--){
+        for(int j=11; j>=i+1;j--){
             //map[i].updatepostion();
             Collide(i,j);
             
