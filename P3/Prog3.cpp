@@ -70,6 +70,8 @@ public:
     double getR(){return cr;}
     double getB(){return cb;}
     double getG(){return cg;}
+    double getnextx() {return cx + cvx;}
+    double getnexty() {return cy + cvy;}
     void setCX(double x){cx = x;}
     void setCY(double y){cy = y;}
     void setCVX(double vx){cvx = vx;}
@@ -122,23 +124,23 @@ struct vectortype
     double y;
 };
 
-void Collide(int p1, int p2, Circle particles[])
+void Collide(int p1, int p2)
 {
     vectortype en; // Center of Mass coordinate system, normal component
     vectortype et; // Center of Mass coordinate system, tangential component
-    vectortype u[2]; // initial velocities of two particles
+    vectortype u[2]; // initial velocities of two map
     vectortype um[2]; // initial velocities in Center of Mass coordinates
     double umt[2]; // initial velocities in Center of Mass coordinates, tangent component
     double umn[2]; // initial velocities in Center of Mass coordinates, normal component
-    vectortype v[2]; // final velocities of two particles
-    double m[2];    // mass of two particles
-    double M; // mass of two particles together
-    vectortype V; // velocity of two particles together
+    vectortype v[2]; // final velocities of two map
+    double m[2];    // mass of two map
+    double M; // mass of two map together
+    vectortype V; // velocity of two map together
     double size;
     int i;
 
-    double xdif=particles[p1].getnextx() - particles[p2].getnextx();
-    double ydif=particles[p1].getnexty() - particles[p2].getnexty();
+    double xdif=map[p1].getnextx() - map[p2].getnextx();
+    double ydif=map[p1].getnexty() - map[p2].getnexty();
 
     // set Center of Mass coordinate system
     size=sqrt(xdif*xdif + ydif*ydif);
@@ -149,12 +151,12 @@ void Collide(int p1, int p2, Circle particles[])
     et.y=-xdif;
 
     // set u values
-    u[0].x=particles[p1].getdx();
-    u[0].y=particles[p1].getdy();
-    m[0]=particles[p1].getradius()*particles[p1].getradius();
-    u[1].x=particles[p2].getdx();
-    u[1].y=particles[p2].getdy();
-    m[1]=particles[p2].getradius()*particles[p2].getradius();
+    u[0].x=map[p1].getCVX();
+    u[0].y=map[p1].getCVY();
+    m[0]=map[p1].getCS()*map[p1].getCS();
+    u[1].x=map[p2].getCVX();
+    u[1].y=map[p2].getCVY();
+    m[1]=map[p2].getCS()*map[p2].getCS();
 
     // set M and V
     M=m[0]+m[1];
@@ -182,10 +184,10 @@ void Collide(int p1, int p2, Circle particles[])
     }
 
     // reset particle values
-    particles[p1].setdx(v[0].x*COLLISION_FRICTION);
-    particles[p1].setdy(v[0].y*COLLISION_FRICTION);
-    particles[p2].setdx(v[1].x*COLLISION_FRICTION);
-    particles[p2].setdy(v[1].y*COLLISION_FRICTION);
+    map[p1].setCVX(v[0].x*COLLISION_FRICTION);
+    map[p1].setCVY(v[0].y*COLLISION_FRICTION);
+    map[p2].setCVX(v[1].x*COLLISION_FRICTION);
+    map[p2].setCVY(v[1].y*COLLISION_FRICTION);
 
 } /* Collide */
 
@@ -238,9 +240,18 @@ void display(void)
 {
     glClear(GL_COLOR_BUFFER_BIT);
     
-    for (int i=0;i<11;i++){
+    for (int i=0;i<12;i++){
+        for(int j=11; j>i;j--){
+            //map[i].updatepostion();
+            Collide(i,j);
+            
+        }
         map[i].updatepostion();
+        //Collide(map[i], map[i+1]);
 
+    }
+    for (int i=0;i<12;i++){
+        //map[i].updatepostion();
     }
     
     glutPostRedisplay();
