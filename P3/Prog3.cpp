@@ -1,6 +1,6 @@
 //
 //  main.cpp
-//  Prog2
+//  Prog3
 //
 //  Created by Caleb J. Delaney on 1/10/20.
 //  Copyright © 2020 Caleb J. Delaney. All rights reserved.
@@ -24,13 +24,14 @@
 #include <cstdlib>
 #include <vector>
 #include <GLUT/glut.h>
+#include <iostream>
 
 
 // Global Variables (Only what you need!)
 double screen_x = 700;
 double screen_y = 700;
 const double COLLISION_FRICTION = 1.0;
-const double Gavity = .1;
+const double Gravity = .5;
 
 //
 // Functions that draw basic primitives
@@ -95,12 +96,13 @@ void Circle::updatepostion(){
         cvx = -cvx;
     if (cx + cvx < cs)
         cvx = -cvx;
-    cx += cvx*Gavity;
+    cx += cvx;
+    cvy -= Gravity;
     if (cy + cvy + cs > screen_y)
         cvy = -cvy;
     if (cy + cvy < cs)
         cvy = -cvy;
-    cy += cvy*Gavity;
+    cy += cvy;
     glColor3d(cr,cg,cb);
     DrawCircle(cx,cy,cs);
 }
@@ -241,18 +243,23 @@ void display(void)
 {
     glClear(GL_COLOR_BUFFER_BIT);
     
-    for (int i=0;i<12;i++){
-        for(int j=11; j>=i+1;j--){
-            //map[i].updatepostion();
-            Collide(i,j);
+    for (int i=0;i<10;i++){
+        for(int j=9; j>=i+1;j--){
+            //if distance(sqrt((x1-x2)^2+(y1-y2)^2) of the next step <= radius1 + radius2
+            if(sqrt(pow(map[i].getCX()+map[i].getCVX()+map[i].getCS() - map[j].getCX()+map[j].getCVX()+map[j].getCS(),2)+pow(map[i].getCY()+map[i].getCVY()+map[i].getCS() - map[j].getCY()+map[j].getCVY()+map[j].getCS(),2)) <= (map[i].getCS()/2+map[j].getCS()/2)){
+                    Collide(i,j);
+                std::cout << "i " << i << " j " << j << std::endl;
+                std::cout << "i " << map[i].getCX() << " " << map[i].getCY() << std::endl;
+                std::cout << "j " << map[j].getCX() << " " << map[j].getCY() << std::endl;
+                std::cout << sqrt(pow(map[i].getCX()+map[i].getCVX()+map[i].getCS() - map[j].getCX()+map[j].getCVX()+map[j].getCS(),2)+pow(map[i].getCY()+map[i].getCVY()+map[i].getCS() - map[j].getCY()+map[j].getCVY()+map[j].getCS(),2)) <<std::endl;
+                }
             
         }
-        map[i].updatepostion();
-        //Collide(map[i], map[i+1]);
+        //map[i].updatepostion();
 
     }
-    for (int i=0;i<12;i++){
-        //map[i].updatepostion();
+    for(int i=0;i<10;i++){
+        map[i].updatepostion();
     }
     
     glutPostRedisplay();
@@ -326,16 +333,14 @@ void InitializeMyStuff()
     Circle c3 = Circle(650,650,1,0,0,1,5,40);
     Circle c4 = Circle(300,350,.5,.1,1,.89,1,24);
     Circle c5 = Circle(225,40,.8,.2,1,1,.89,36);
-    Circle c6 = Circle(195,525,0,0,5,10,5,42);
+    Circle c6 = Circle(195,525,0.8,0.8,.8,10,5,42);
     Circle c7 = Circle(590,75,.9,.77,.2,7,5,15);
     Circle c8 = Circle(175,30,0,1,0,4,9,9);
-    Circle c9 = Circle(30,425,1,0,1,4,4,30);
+    Circle c9 = Circle(30,425,1,1,0,4,4,30);
     Circle c10 = Circle(180,180,0,1,1,1,1,28);
     map.push_back(c1);
     map.push_back(c2);
     map.push_back(c3);
-    map.push_back(c4);
-    map.push_back(c5);
     map.push_back(c4);
     map.push_back(c5);
     map.push_back(c6);
@@ -343,11 +348,6 @@ void InitializeMyStuff()
     map.push_back(c8);
     map.push_back(c9);
     map.push_back(c10);
-    /*
-     for(int i=0;i<11;i++){
-        
-     }
-     */
 }
 
 
