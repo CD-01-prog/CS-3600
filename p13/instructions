@@ -1,0 +1,11 @@
+Objectives:
+
+Apply textures to a model.
+Understand the different kinds of textures.
+Assignment Specifications:
+
+Add at least 3 different texture maps to your Rat's Maze.
+At least one texture must repeat several times over the polygon.  
+At least one texture must use only the middle part of the polygon.  
+At least one texture must exactly fill up the whole polygon.  
+See StarterTextures2012.zip from our Notes page for help.
