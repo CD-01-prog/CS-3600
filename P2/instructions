@@ -1,0 +1,10 @@
+Objectives:
+
+Use OpenGL to create many circles of varying colors and sizes.
+Animate the circles.
+Assignment Specifications:
+
+Start with the bouncing rectangle code.
+Modify it to be many circles (10 for example) of various colors and sizes.
+Cause the circles to move around over time, and bounce off the edges of the screen.
+Compile and run!  
