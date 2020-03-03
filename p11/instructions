@@ -1,0 +1,14 @@
+Objectives:
+
+Design a Ray Tracer.
+Use the Phong lighting model.
+Assignment Specifications:
+
+Get the crippled ray tracer, Model.txt, vector.cpp, and vector.h from our Web Page.
+Put these files in your own project.
+With the ray-tracing switch at 0, the code already loads the scene from Model.txt and draws it using OpenGL.
+With the ray-tracing switch at 1, it should draw the scene using your ray tracer. Read through the code and finish the necessary parts so that it works. For this assignment, you don't need to get correct lighting. Just color a pixel gray if its ray strikes a sphere, black otherwise.
+For fun, change the model so its not so ugly.
+Grading:
+
+Its hard to break this one into pieces. Just get it working, before the due date if possible.  
