@@ -1,0 +1,14 @@
+Objectives:
+
+Draw 2D walls in a 3D world.
+Create and use an interactive viewing camera.
+View the world from 1st or 3rd perspective.
+Respond to keystrokes, and maintain a viewing state accordingly.
+Assignment Specifications:
+
+Make the maze 3D by extruding the lines into walls.
+Draw each wall a different color.
+When the user clicks ‘p’, see the world from a perspective viewpoint of your choosing.
+When the user clicks ‘r’, see the world through the rat's eyes.
+When the user clicks ‘t’, see the world from the top view (same as lines from last assignment).
+See Going3D.cpp on the Notes page.
