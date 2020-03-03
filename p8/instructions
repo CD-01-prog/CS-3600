@@ -1,0 +1,11 @@
+Objectives:
+
+Design a ground/water terrain, such as might be used in a game.
+Provide the ability to fly over the terrain.
+Assignment Specifications:
+
+Use a resolution of about 100 by 100 quads to draw the ground.
+Draw 1 large blue rectangle at some height to represent water.
+Generate realistic hills by setting z (the height) to be a function of sins and cosines and products of sines and cosines of x and y. 
+Your camera should maintain a constant distance above the ground (or water).
+Your camera should tilt upward or downward according to the terrain.
