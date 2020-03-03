@@ -1,0 +1,57 @@
+This program supports creation, altering, and drawing of Bezier curves.
+
+BASIC IMPLEMENTATION: 60 POINTS:
+Implement a Point2 class, that holds a 2D point comprised of 2 floats.
+Implement a Bezier class, that consists of and array of 4 Point2 objects.
+The Bezier class should have these methods:
+Point2 Evaluate(float t); // given parameter t between 0 and 1, finds the interpolated point.
+void DrawCurve(); // draws the curve by approximating it at about 20 evaluation points.
+void DrawControlPoints(); // draws the 4 control points as circles.
+The screen starts with 1 Bezier curve, in some default position.
+Your display method should call DrawCurve and DrawControlPoints
+This is the formula for evaluating a Bezier curve:
+p= p0*(1-t)*(1-t)*(1-t) + 3*p1*(1-t)*(1-t)*t + 3*p2*(1-t)*t*t + p3*t*t*t;
+ 
+·         STEP 2: 20 POINTS:
+
+·         Allow the user to move the control points around.
+
+·         When the mouse goes down, see if its on a control point.
+
+·         If it is, allow the mouse to drag that point, until the mouse button is released.
+
+·         Of course, the curve should dynamically update as its control points are altered.
+
+·         You should add this method to your Bezier class:
+
+·         int IsPicked(float x,float y);
+
+·         // returns <n> if x,y is within <radius> of control point <n>.
+
+·         // returns -1 if x,y is not close to any of the 4 control points.
+
+·         You will also need to implement the GLUT callback function:
+
+·         glutMotionFunc(motion);
+
+·         which is prototyped as follows:
+
+·         void motion(int x, int y); // gets called during a mouse drag.
+
+·          
+
+·         Step 3: 10 POINTS:
+
+·         Provide a menu option to add more Bezier curves, up to 5.
+
+·         These should be placed nicely, so that they are not on top of previous ones.
+
+·         The control points of all the curves should be alterable.
+
+·          
+
+·         Step 4: 10 POINTS:
+
+·         Provide some user interface (your design) which allows the user to individually color all of the curves.
+
+·         For example, you may have the keys (1-5) select a curve to be "active". Then a menu option with various colors could set the color of the "active" curve.
