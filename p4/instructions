@@ -1,0 +1,11 @@
+Objectives:
+Become more familiar with the OpenGL environment.
+Understand the principle of separating code from data. Design a template pattern for data files and write code that will read data from a file into the graphics engine.
+Use more sophisticated physically based modeling techniques, including Spring Forces and Ordinary Differential Equation (ODE) solvers.
+Assignment:
+Start with the Spring project provided in the notes section and enhance it in the following ways:
+(20%) Right now the particle data and forces data are hard-coded in a function named InitParticles1. It is a better software engineering strategy to separate the graphics engine code from the data. Therefore, modify the program so that it begins by asking the user for an input data file. Then your program should parse through that file and create the particles and forces as the file directs. You decide the format of your input file, but make it flexible enough that a user can do everything that is currently being done in InitParticles1.
+(20%) Right now DeltaT is a static variable inside the display function, hard-coded to 0.1. Move it inside the ParticleSystem class, default it to 0.1, but provide a way for the user to change it from the data file.
+(20%) Right now a SpringForce constructor takes a parameter representing the rest-length of the spring. If it is not specified, it defaults to zero. The constructor detects a zero setting and resets the spring length to the exact distance between the two particles it connects. Redo the functionality of the rest-length parameter so it works in the following more user friendly manner: A rest-length of 1.0 means to set it to the starting distance between the two particles. A 2.0 setting means it wants to be twice as long as that. A 0.5 setting means it wants to be half as long as that, and so forth. The user should be able to specify rest-lengths in the data file using this more intuitive notation.
+(20%) Enhance the SpringForce class so that SpringForce objects maintain their own color. Enhance your input file format so users can assign different colors to their springs.
+(20%) Design your own cool looking model using your data file format.
