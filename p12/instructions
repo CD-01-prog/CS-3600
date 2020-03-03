@@ -1,0 +1,8 @@
+Objectives:
+
+Design a Ray Tracer.
+Use the Phong lighting model.
+Assignment Specifications:
+
+Finish your ray tracer from the last assignment so that it does pretty lighting, using the Phong lighting model.
+For fun, add shadows!  
