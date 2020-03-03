@@ -1,0 +1,9 @@
+Objectives:
+
+Place a rat inside the maze of the last assignment.
+Provide navigation tools, so a user can move the rat around.
+Make sure the rat doesn't cross walls. This is done most easily by making sure the rat does not land on a wall, and giving it a small enough step size that it can't get across a wall without stepping on it.
+Rat movement must be close to continuous (That is, no popping from cell to cell).
+Assignment Specifications:
+
+See problem 3.14 in the book. 
