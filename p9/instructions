@@ -1,0 +1,17 @@
+Objectives:
+
+Design a chess board.
+Load and use graphical data from a file.
+Use transformation commands to get chess pieces in the right place.
+Use lighting.
+Create an animation.
+Use Display Lists
+Assignment Specifications:
+
+Design your own chess board.
+Pick a nice vantage point for the camera.
+Get the files from the web site containing polygon descriptions of the chess pieces.
+Place all chess pieces correctly on the board, both white and black.
+Place a light in the scene.
+Animate the first 6 moves of a chess game, including a piece capture. Be creative.
+Draw all pieces using Display Lists.
