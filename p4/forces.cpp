@@ -5,12 +5,11 @@ using namespace std;
 #include "forces.hpp"
 #include "particle.hpp"
 
-//A rest-length of 1.0 means to set it to the starting distance between the two particles. A 2.0 setting means it wants to be twice as long as that. A 0.5 setting means it wants to be half as long as that, and so forth. The user should be able to specify rest-lengths in the data file using this more intuitive notation
 SpringForce::SpringForce(Particle* p1_temp,
                          Particle* p2_temp,
                          double spring_constant_temp,
                          double damping_constant_temp,
-                         double rest_length_temp,std::string color):
+                         double rest_length_temp):
                         p1(p1_temp),
                         p2(p2_temp),
                         spring_constant(spring_constant_temp),
@@ -33,6 +32,48 @@ SpringForce::SpringForce(Particle* p1_temp,
         rest_length = sqrt(rest_length);
     }
 }
+/*
+ SpringForce::SpringForce(Particle* p1_temp,
+                          Particle* p2_temp,
+                          double spring_constant_temp,
+                          double damping_constant_temp,
+                          double rest_length_temp,
+                          double color[4]):
+                         p1(p1_temp),
+                         p2(p2_temp),
+                         spring_constant(spring_constant_temp),
+                         damping_constant(damping_constant_temp),
+                         rest_length(rest_length_temp)
+ {
+     double pos1[DIM];
+     double pos2[DIM];
+     p1-> GetPosition(pos1);
+     p2->GetPosition(pos2);
+     double d = sqrt(pow(pos2[0] - pos1[0], 2) + pow(pos2[1] - pos1[1], 2));
+     rest_length *= d;
+     rgba[0] = color[0];
+     rgba[1] = color[1];
+     rgba[2] = color[2];
+     rgba[3] = color[3];
+ }
+
+ double SpringForce::GetRed()
+ {
+     return rgba[0];
+ }
+
+ double SpringForce::GetGreen()
+ {
+     return rgba[1];
+ }
+
+ double SpringForce::GetBlue()
+ {
+     return rgba[2];
+ }
+
+ 
+ */
 
 void SpringForce::Apply()
 {
