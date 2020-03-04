@@ -7,8 +7,10 @@
 #include <cstdio>
 #include <cassert>
 #include <cmath>
-#include <string.h>
+#include <string>
 #include <iostream>
+#include <fstream>
+
 using namespace std;
 #include <GLUT/glut.h>
 #include "graphics.h"
@@ -106,10 +108,10 @@ void display(void)
     glClear(GL_COLOR_BUFFER_BIT);
     glColor3dv(whiteMaterial);
 
-    static double DeltaT = 0.1;
+    //static double DeltaT = 0.1;
     //EulerStep(PS, DeltaT);
     //MidpointStep(PS, DeltaT);
-    RungeKuttaStep(PS, DeltaT);
+    RungeKuttaStep(PS, PS.getDeltaT());
 
     int N = PS.GetNumParticles();
     int NF = PS.GetNumForces();
@@ -245,9 +247,49 @@ void mouse(int mouse_button, int state, int x, int y)
     }
     glutPostRedisplay();
 }
-
+// Then your program should parse through that file and create the particles and forces as the file directs. You decide the format of your input file, but make it flexible enough that a user can do everything that is currently being done in InitParticles1.
 void InitParticles1()
 {
+    /*
+     if line[0] == 'DeltaT'
+     then PS.setDeltaT = line[1];
+     
+    std::string file;
+    std::ifstream data;
+    std::cout << "what file would you like to use: ";
+    std::cin >> file;
+    std::string line;
+    data.open(file);
+    
+    if (data.is_open()){
+        while (getline(data,line)){
+            
+            if (line[0] == 'particle'){
+                Particle *line[1] = new Particle(std::atof(line[2]) ,std::atof(line[3]) ,std::atof(line[4]), std::atof(line[5]), std::atof(line[6]), std::atof(line[7]));
+                PS.AddParticle(line[1]);
+            }
+            else if(line[0] == 'force'){
+                if (line[1] == 'spring'){
+                    Force * line[2] = new SpringForce(line[3],line[4],line[5],line[6],line[7])
+                    PS.AddForce(line[2]);
+                }
+                else if (line[1] == 'drag'){
+                    Force * line[2] = new DrageForce(line[3],&PS);
+                    PS.AddForce(line[2]);
+                }
+            }
+            else if(line[0] == 'gravity'){
+                double gravity[DIM] = {line[1],line[2]};
+                Force * line[3] = new GravityForce(gravity, &PS);
+                PS.AddForce(line[3]);
+            }
+            else{
+                std::cout << "did not understand that line" << std::endl;
+            }
+        }
+        data.close();
+    }
+    */
     Particle *p1 = new Particle(100, 200,  4.0, -1.0,  10, false);
     PS.AddParticle(p1);
 
