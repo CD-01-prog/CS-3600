@@ -176,20 +176,20 @@ void Circle::updatepostion(int i){
     cvy *= AIRFRICTION;
     cvx *= AIRFRICTION;
     //speed limit
-    if (cvx > 5)
-        cvx = 5;
-    if (cvx < -5)
-        cvx = -5;
+    if (cvx > 30)
+        cvx = 30;
+    if (cvx < -30)
+        cvx = -30;
     //make sure withing right and left walls
     if (cx + cvx + cs > screen_x)
         cvx = -cvx;
     if (cx + cvx < cs)
         cvx = -cvx;
     //speed limit
-    if (cvy > 5)
-        cvy = 5;
-    if (cvy < -5)
-        cvy = -5;
+    if (cvy > 30)
+        cvy = 30;
+    if (cvy < -30)
+        cvy = -30;
     // make sure within top and bottom walls
     if (cy + cvy + cs > screen_y)
         cvy = -cvy;
@@ -209,6 +209,15 @@ void Circle::updatepostion(int i){
     }}
     cx += cvx;
     cy += cvy;
+    //if it left the box put it back
+    if (cx < 0)
+        cx = cs+1;
+    if (cx > screen_x)
+        cx = screen_x-1;
+    if (cy < 0)
+        cy = cs+1;
+    if (cy > screen_y)
+        cy = screen_y-1;
     glColor3d(cr,cg,cb);
     DrawCircle(cx,cy,cs);
 }
@@ -345,7 +354,7 @@ void mouse(int mouse_button, int state, int x, int y)
 void InitializeMyStuff()
 {
     //x , y, r, g, b , vx, vy, s
-    Circle c1 = Circle(50,50,0,0,1,.5,.5,40);
+    Circle c1 = Circle(50, 50,0,0,1,.5,.5,40);
     Circle c2 = Circle(500,505,.2,.7,.3,.5,.5,40);
     Circle c3 = Circle(650,650,1,0,0,.5,.5,40);
     Circle c4 = Circle(300,350,.5,.1,1,.5,.5,40);
@@ -353,7 +362,7 @@ void InitializeMyStuff()
     Circle c6 = Circle(195,525,0.8,0.8,.8,.5,.5,40);
     Circle c7 = Circle(590,75,.9,.77,.2,.5,.5,40);
     Circle c8 = Circle(175,30,0,1,0,.5,.5,40);
-    Circle c9 = Circle(30,425,1,1,0,.5,.5,40);
+    Circle c9 = Circle(30, 425,1,1,0,.5,.5,40);
     Circle c10 = Circle(180,180,0,1,1,.5,.5,40);
     map.push_back(c1);
     map.push_back(c2);
