@@ -6,7 +6,6 @@
 #define FORCE
 
 #include "particle.hpp"
-#include <string>
 
 enum FORCE_TYPE { SPRING_FORCE, GRAVITY_FORCE, DRAG_FORCE };
 
@@ -25,28 +24,29 @@ public:
 
 //
 // SpringForce class
-//Enhance the SpringForce class so that SpringForce objects maintain their own color
+//
 class SpringForce : public Force
 {
 public:
-    SpringForce(Particle* p1, Particle *p2, double spring_constant, double damping_constant, double rest_length=0,std::string color="greenMaterial");
+    SpringForce(Particle* p1, Particle *p2, double spring_constant, double damping_constant, double rest_length=0/*double color[4]*/);
 
     virtual void Apply();
     virtual FORCE_TYPE Type();
 
     Particle* GetParticle1();
     Particle* GetParticle2();
-    
-    std::string getColor(){return color;}
-    void setColor(std::string colorN){color = colorN;}
-
+/*
+   double GetRed();
+   double GetBlue();
+   double GetGreen();
+ */
 private:
     Particle* p1;
     Particle* p2;
     double rest_length;
     double spring_constant;
     double damping_constant;
-    std::string color;
+    //double rgba[4];
 };
 
 //
