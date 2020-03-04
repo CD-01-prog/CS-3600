@@ -31,8 +31,17 @@
 double screen_x = 700;
 double screen_y = 700;
 const double COLLISION_FRICTION = 1.0;
-const double Gravity = .5;
-int i;
+const double Gravity = .1;
+const double AIRFRICTION = .999;
+//collide code
+
+struct vectortype
+{
+    double x;
+    double y;
+};
+
+
 
 //
 // Functions that draw basic primitives
@@ -65,7 +74,7 @@ private:
 public:
     Circle();
     Circle(double x,double y,double r,double g,double b,double vx,double vy,double cs);
-    void updatepostion();
+    void updatepostion(int i);
     double getCX(){return cx;}
     double getCY(){return cy;}
     double getCVX(){return cvx;}
@@ -76,7 +85,7 @@ public:
     double getG(){return cg;}
     double getnextx() {return cx + cvx;}
     double getnexty() {return cy + cvy;}
-    bool getCollide(){return collide;)
+    bool getCollide(){return collide;}
     void setCX(double x){cx = x;}
     void setCY(double y){cy = y;}
     void setCVX(double vx){cvx = vx;}
@@ -95,54 +104,7 @@ Circle::Circle(){
     cvy = 0;
     cs = 10;
 }
-void Circle::updatepostion(){
-    cvy -= Gravity;
-    if (cx + cvx + cs > screen_x)
-        cvx = -cvx;
-    if (cx + cvx < cs)
-        cvx = -cvx;
-    if (cy + cvy + cs > screen_y)
-        cvy = -cvy;
-    if (cy + cvy < cs)
-        cvy = -cvy;
-    bool collideCheck = false;
-    for(int j=i+1;j<map.length();j++){
-        if(sqrt(pow(map[i].getnextx() - map[j].getnextx,2) + pow(map[i].getnexty()-map[j].getnexty(),2)) < map[i].getCS() + map[j].getCS()){
-           collideCheck = true;
-           if(!map[i].getCollide){
-               Collide(i,j);
-               map[i].setCollide(true);
-        }
-    }
-    if (!collideCheck){
-       map[i].setCollide(false);
-    }
-    cx += cvx;
-    cy += cvy;
-    glColor3d(cr,cg,cb);
-    DrawCircle(cx,cy,cs);
-}
-Circle::Circle(double x,double y,double r,double g,double b,double vx,double vy,double s){
-    cx = x;
-    cy = y;
-    cvx = vx;
-    cvy = vy;
-    cs = s;
-    cr = r;
-    cb = b;
-    cg = b;
-    glColor3d(cr,cg,cb);
-    DrawCircle(x,y,s);
- }
 std::vector<Circle> map;
-//collide code
-
-struct vectortype
-{
-    double x;
-    double y;
-};
-
 void Collide(int p1, int p2)
 {
     vectortype en; // Center of Mass coordinate system, normal component
@@ -209,6 +171,61 @@ void Collide(int p1, int p2)
     map[p2].setCVY(v[1].y*COLLISION_FRICTION);
 
 } /* Collide */
+void Circle::updatepostion(int i){
+    cvy -= Gravity;
+    cvy *= AIRFRICTION;
+    cvx *= AIRFRICTION;
+    //speed limit
+    if (cvx > 5)
+        cvx = 5;
+    if (cvx < -5)
+        cvx = -5;
+    //make sure withing right and left walls
+    if (cx + cvx + cs > screen_x)
+        cvx = -cvx;
+    if (cx + cvx < cs)
+        cvx = -cvx;
+    //speed limit
+    if (cvy > 5)
+        cvy = 5;
+    if (cvy < -5)
+        cvy = -5;
+    // make sure within top and bottom walls
+    if (cy + cvy + cs > screen_y)
+        cvy = -cvy;
+    if (cy + cvy < cs)
+        cvy = -cvy;
+    bool collideCheck = false;
+    for(int j=i+1;j<map.size();j++){
+        if(sqrt(pow(map[j].getnextx() - map[i].getnextx(),2) + pow(map[j].getnexty()-map[i].getnexty(),2)) < map[i].getCS() + map[j].getCS()){
+           collideCheck = true;
+           if(!map[i].getCollide()){
+               Collide(i,j);
+               map[i].setCollide(true);
+        }
+    }
+    if (!collideCheck){
+       map[i].setCollide(false);
+    }}
+    cx += cvx;
+    cy += cvy;
+    glColor3d(cr,cg,cb);
+    DrawCircle(cx,cy,cs);
+}
+
+Circle::Circle(double x,double y,double r,double g,double b,double vx,double vy,double s){
+    cx = x;
+    cy = y;
+    cvx = vx;
+    cvy = vy;
+    cs = s;
+    cr = r;
+    cb = b;
+    cg = b;
+    collide = false;
+    glColor3d(cr,cg,cb);
+    DrawCircle(cx,cy,cs);
+ }
 
 void DrawRectangle(double x1, double y1, double x2, double y2)
 {
@@ -259,12 +276,11 @@ void display(void)
 {
     glClear(GL_COLOR_BUFFER_BIT);
     
-    for(i=0; i<map.length()+1;i++){
-    map[i].updateposition();   
+    for(int i=0; i<=map.size()-1;i++){
+        map[i].updatepostion(i);
     }
-    
-    glutPostRedisplay();
     glutSwapBuffers();
+    glutPostRedisplay();
 }
 
 // This callback function gets called by the Glut
@@ -329,16 +345,16 @@ void mouse(int mouse_button, int state, int x, int y)
 void InitializeMyStuff()
 {
     //x , y, r, g, b , vx, vy, s
-    Circle c1 = Circle(50,50,0,0,1,50,50,20);
-    Circle c2 = Circle(500,505,.2,.7,.3,5,1,10);
-    Circle c3 = Circle(650,650,1,0,0,1,5,40);
-    Circle c4 = Circle(300,350,.5,.1,1,.89,1,24);
-    Circle c5 = Circle(225,40,.8,.2,1,1,.89,36);
-    Circle c6 = Circle(195,525,0.8,0.8,.8,10,5,42);
-    Circle c7 = Circle(590,75,.9,.77,.2,7,5,15);
-    Circle c8 = Circle(175,30,0,1,0,4,9,9);
-    Circle c9 = Circle(30,425,1,1,0,4,4,30);
-    Circle c10 = Circle(180,180,0,1,1,1,1,28);
+    Circle c1 = Circle(50,50,0,0,1,.5,.5,40);
+    Circle c2 = Circle(500,505,.2,.7,.3,.5,.5,40);
+    Circle c3 = Circle(650,650,1,0,0,.5,.5,40);
+    Circle c4 = Circle(300,350,.5,.1,1,.5,.5,40);
+    Circle c5 = Circle(225,40,.8,.2,1,.5,.5,40);
+    Circle c6 = Circle(195,525,0.8,0.8,.8,.5,.5,40);
+    Circle c7 = Circle(590,75,.9,.77,.2,.5,.5,40);
+    Circle c8 = Circle(175,30,0,1,0,.5,.5,40);
+    Circle c9 = Circle(30,425,1,1,0,.5,.5,40);
+    Circle c10 = Circle(180,180,0,1,1,.5,.5,40);
     map.push_back(c1);
     map.push_back(c2);
     map.push_back(c3);
