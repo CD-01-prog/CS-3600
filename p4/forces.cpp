@@ -5,11 +5,12 @@ using namespace std;
 #include "forces.hpp"
 #include "particle.hpp"
 
+//A rest-length of 1.0 means to set it to the starting distance between the two particles. A 2.0 setting means it wants to be twice as long as that. A 0.5 setting means it wants to be half as long as that, and so forth. The user should be able to specify rest-lengths in the data file using this more intuitive notation
 SpringForce::SpringForce(Particle* p1_temp,
                          Particle* p2_temp,
                          double spring_constant_temp,
                          double damping_constant_temp,
-                         double rest_length_temp):
+                         double rest_length_temp,std::string color):
                         p1(p1_temp),
                         p2(p2_temp),
                         spring_constant(spring_constant_temp),
