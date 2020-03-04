@@ -32,6 +32,7 @@ double screen_x = 700;
 double screen_y = 700;
 const double COLLISION_FRICTION = 1.0;
 const double Gravity = .5;
+int i;
 
 //
 // Functions that draw basic primitives
@@ -60,6 +61,7 @@ private:
     double cr;// red
     double cg;// green
     double cb;// blue
+    bool collide;
 public:
     Circle();
     Circle(double x,double y,double r,double g,double b,double vx,double vy,double cs);
@@ -74,6 +76,7 @@ public:
     double getG(){return cg;}
     double getnextx() {return cx + cvx;}
     double getnexty() {return cy + cvy;}
+    bool getCollide(){return collide;)
     void setCX(double x){cx = x;}
     void setCY(double y){cy = y;}
     void setCVX(double vx){cvx = vx;}
@@ -82,6 +85,7 @@ public:
     void setR(double nr){cr = nr;}
     void setB(double nb){cb = nb;}
     void setG(double ng){cg = ng;}
+    void setCollide(bool answer){collide = answer;}
     
 };
 Circle::Circle(){
@@ -92,16 +96,28 @@ Circle::Circle(){
     cs = 10;
 }
 void Circle::updatepostion(){
+    cvy -= Gravity;
     if (cx + cvx + cs > screen_x)
         cvx = -cvx;
     if (cx + cvx < cs)
         cvx = -cvx;
-    cx += cvx;
-    cvy -= Gravity;
     if (cy + cvy + cs > screen_y)
         cvy = -cvy;
     if (cy + cvy < cs)
         cvy = -cvy;
+    bool collideCheck = false;
+    for(int j=i+1;j<map.length();j++){
+        if(sqrt(pow(map[i].getnextx() - map[j].getnextx,2) + pow(map[i].getnexty()-map[j].getnexty(),2)) < map[i].getCS() + map[j].getCS()){
+           collideCheck = true;
+           if(!map[i].getCollide){
+               Collide(i,j);
+               map[i].setCollide(true);
+        }
+    }
+    if (!collideCheck){
+       map[i].setCollide(false);
+    }
+    cx += cvx;
     cy += cvy;
     glColor3d(cr,cg,cb);
     DrawCircle(cx,cy,cs);
@@ -243,23 +259,8 @@ void display(void)
 {
     glClear(GL_COLOR_BUFFER_BIT);
     
-    for (int i=0;i<10;i++){
-        for(int j=9; j>=i+1;j--){
-            //if distance(sqrt((x1-x2)^2+(y1-y2)^2) of the next step <= radius1 + radius2
-            if(sqrt(pow(map[i].getCX()+map[i].getCVX()+map[i].getCS() - map[j].getCX()+map[j].getCVX()+map[j].getCS(),2)+pow(map[i].getCY()+map[i].getCVY()+map[i].getCS() - map[j].getCY()+map[j].getCVY()+map[j].getCS(),2)) <= (map[i].getCS()/2+map[j].getCS()/2)){
-                    Collide(i,j);
-                std::cout << "i " << i << " j " << j << std::endl;
-                std::cout << "i " << map[i].getCX() << " " << map[i].getCY() << std::endl;
-                std::cout << "j " << map[j].getCX() << " " << map[j].getCY() << std::endl;
-                std::cout << sqrt(pow(map[i].getCX()+map[i].getCVX()+map[i].getCS() - map[j].getCX()+map[j].getCVX()+map[j].getCS(),2)+pow(map[i].getCY()+map[i].getCVY()+map[i].getCS() - map[j].getCY()+map[j].getCVY()+map[j].getCS(),2)) <<std::endl;
-                }
-            
-        }
-        //map[i].updatepostion();
-
-    }
-    for(int i=0;i<10;i++){
-        map[i].updatepostion();
+    for(i=0; i<map.length()+1;i++){
+    map[i].updateposition();   
     }
     
     glutPostRedisplay();
