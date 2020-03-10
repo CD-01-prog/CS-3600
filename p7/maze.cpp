@@ -1,5 +1,3 @@
-#include <vector>
-#include <cstdlib>
 #include <GLUT/glut.h>
 #include "graphics.hpp"
 #include "maze.hpp"
@@ -16,48 +14,41 @@ void Cell::Draw(int x, int y)
     {
     glColor3d(0, 0, 0);
         if (left){
-        DrawLine(x, y, x, y + 1);
-    
-        
         glColor3d(0.2,0.7,0.3);//green
         glBegin(GL_QUADS);
-        glVertex3i(x, y, 0);
-        glVertex3i(x, y + 1, 0);
-        glVertex3i(x, y + 1, 1);
-        glVertex3i(x, y, 1);
+        glVertex3d(x, y, 0);
+        glVertex3d(x, y + 1, 0);
+        glVertex3d(x, y + 1, 1);
+        glVertex3d(x, y, 1);
         glEnd();
     }
         if (top){
-        DrawLine(x, y + 1, x + 1, y + 1);
-    
         glColor3d(0,0,1);//blue
         glBegin(GL_QUADS);
-        glVertex3i(x, y, 0);
-        glVertex3i(x+1, y, 0);
-        glVertex3i(x+1, y, 1);
-        glVertex3i(x, y, 1);
+        glVertex3d(x, y+1, 0);
+        glVertex3d(x+1, y+1, 0);
+        glVertex3d(x+1, y+1, 1);
+        glVertex3d(x, y+1, 1);
         glEnd();
     }
-        if (right){
-        DrawLine(x + 1, y + 1, x + 1, y);
-    
-        glColor3d(0,1,1);// aqua
+        if (right && x == WIDTH-1){
+        glColor3d(0.2,0.7,0.3);
         glBegin(GL_QUADS);
-        glVertex3i(x, y+1, 0);
-        glVertex3i(x, y, 0);
-        glVertex3i(x, y, 1);
-        glVertex3i(x, y+1, 1);
+        glVertex3d(x+1, y+1, 0);
+        glVertex3d(x+1, y, 0);
+        glVertex3d(x+1, y, 1);
+        glVertex3d(x+1, y+1, 1);
     glEnd();
     }
-        if (bottom){
-        DrawLine(x + 1, y, x, y);
-           glColor3d(0,0,0);// black
+        if (bottom && y == 0){
+           glColor3d(0,0,1);
            glBegin(GL_QUADS);
-           glVertex3i(x+1, y, 0);
-           glVertex3i(x, y, 0);
-           glVertex3i(x, y, 1);
-           glVertex3i(x+1, y, 1);
+           glVertex3d(x+1, y, 0);
+           glVertex3d(x, y, 0);
+           glVertex3d(x, y, 1);
+           glVertex3d(x+1, y, 1);
            glEnd();
+        
         }}else
     {
         if (left)
@@ -68,10 +59,6 @@ void Cell::Draw(int x, int y)
           DrawLine(x + 1, y + 1, x + 1, y);
         if (bottom)
           DrawLine(x + 1, y, x, y);
-        
-        // draw walls as GL_QUADS
-        // figure out a way to draw each wall in a different color. (you don't have to save the color of the wall)
-        // figure out a way to prevent two co-planar wall from 'bleeding' on top of each other when drawing.
     }
 
 }
