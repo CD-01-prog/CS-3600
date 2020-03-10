@@ -1,5 +1,6 @@
 #pragma once
 
+//edit this to change scale of maze remeber to change perspective to be high enough and clip distance to see everything
 const int WIDTH = 6;
 const int HEIGHT = 5;
 
