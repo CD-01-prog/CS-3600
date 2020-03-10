@@ -42,7 +42,9 @@ void Rat::ScurryBackward(){
     y -= dy * Speed;
 }
 void Rat::Draw(){
+    
     glPushMatrix();
+    glColor3d(0,0,0);
     glTranslated(x, y, 0);
     glRotated(degrees, 0, 0, 1);
     glScaled(.5, .5, 1.0);
