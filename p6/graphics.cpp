@@ -16,8 +16,8 @@
 #include <iostream>
 //#include <cstdlib>
 #include <GLUT/glut.h>
-#include "graphics.h"
-#include "maze.h"
+#include "graphics.hpp"
+#include "maze.hpp"
 #include "Rat.hpp"
 
 
@@ -113,7 +113,7 @@ void DrawText(double x, double y, const char *string)
 void display(void)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+    current_view = top_view;
     if (current_view == perspective_view)
     {
         glEnable(GL_DEPTH_TEST);
@@ -139,13 +139,13 @@ void display(void)
     }
     if (gMiddleButtonDown == true)
     {
-        if (gMaze.IsSafe(rat.Getx()+rat.Getdx()*rat.GetSpeed(),rat.Gety()+rat.Getdy()*rat.GetSpeed(),rat.Getsize())){
+        if (gMaze.IsSafe(rat.Getx() + rat.GetSpeed()*rat.Getdx(),rat.Gety() + rat.GetSpeed()*rat.Getdy(), rat.Getsize())){
             rat.ScurryForward();}
         gMiddleButtonDown = false;
     }
     if (gDownButtonDown == true)
     {
-        if (gMaze.IsSafe(rat.Getx()-rat.Getdx()*rat.GetSpeed(),rat.Gety()-rat.Getdy()*rat.GetSpeed(),rat.Getsize())){
+        if (gMaze.IsSafe(rat.Getx() - rat.GetSpeed()*rat.Getdx(),rat.Gety() - rat.GetSpeed()*rat.Getdy(), rat.Getsize())){
             rat.ScurryBackward();}
         gDownButtonDown = false;
     }
@@ -159,6 +159,7 @@ void display(void)
     {
         rat.Draw();
     }
+    
     if (current_view == rat_view)
     {
         rat.RatView();
