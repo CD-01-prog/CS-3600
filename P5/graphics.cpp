@@ -118,6 +118,7 @@ void display(void)
     {
         glEnable(GL_DEPTH_TEST);
         glLoadIdentity();
+        //change if change scale of maze so can see whole maze properly
         gluLookAt(3, 3, 10, 3, 3, 0, 0, 1, 0);
     }
 
@@ -146,6 +147,7 @@ void SetPerspectiveView(int w, int h)
     gluPerspective(
         /* field of view in degree */ 38.0,
         /* aspect ratio */ aspectRatio,
+        //sets clip distance change if scale change of maze
         /* Z near */ .1, /* Z far */ 30.0);
     glMatrixMode(GL_MODELVIEW);
 }
