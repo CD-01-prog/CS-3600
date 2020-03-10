@@ -108,7 +108,6 @@ void DrawText(double x, double y, const char *string)
 void display(void)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    current_view = top_view;
     if (current_view == perspective_view)
     {
         glEnable(GL_DEPTH_TEST);
