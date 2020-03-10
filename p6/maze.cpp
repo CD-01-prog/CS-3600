@@ -1,8 +1,8 @@
 #include <vector>
 #include <cstdlib>
 #include <GLUT/glut.h>
-#include "graphics.h"
-#include "maze.h"
+#include "graphics.hpp"
+#include "maze.hpp"
 
 Cell::Cell()
 {
@@ -15,9 +15,9 @@ void Cell::Draw(int x, int y)
     if (current_view != top_view)
     {
     glColor3d(0, 0, 0);
-    if (left)
+        if (left){
         DrawLine(x, y, x, y + 1);
-    {
+    
         
         glColor3d(0.2,0.7,0.3);//green
         glBegin(GL_QUADS);
@@ -27,9 +27,9 @@ void Cell::Draw(int x, int y)
         glVertex3i(x, y, 1);
         glEnd();
     }
-    if (top)
+        if (top){
         DrawLine(x, y + 1, x + 1, y + 1);
-    {
+    
         glColor3d(0,0,1);//blue
         glBegin(GL_QUADS);
         glVertex3i(x, y, 0);
@@ -38,9 +38,9 @@ void Cell::Draw(int x, int y)
         glVertex3i(x, y, 1);
         glEnd();
     }
-    if (right)
+        if (right){
         DrawLine(x + 1, y + 1, x + 1, y);
-    {
+    
         glColor3d(0,1,1);// aqua
         glBegin(GL_QUADS);
         glVertex3i(x, y+1, 0);
@@ -49,9 +49,8 @@ void Cell::Draw(int x, int y)
         glVertex3i(x, y+1, 1);
     glEnd();
     }
-    if (bottom)
+        if (bottom){
         DrawLine(x + 1, y, x, y);
-    {
            glColor3d(0,0,0);// black
            glBegin(GL_QUADS);
            glVertex3i(x+1, y, 0);
@@ -59,22 +58,16 @@ void Cell::Draw(int x, int y)
            glVertex3i(x, y, 1);
            glVertex3i(x+1, y, 1);
            glEnd();
-       }
-    }
-    else
+        }}else
     {
         if (left)
-            glColor3d(0.2,0.7,0.3);//green
-            DrawLine(x, y, x, y + 1);
+          DrawLine(x, y, x, y + 1);
         if (top)
-            glColor3d(0,0,1);//blue
-            DrawLine(x, y + 1, x + 1, y + 1);
+          DrawLine(x, y + 1, x + 1, y + 1);
         if (right)
-            glColor3d(0,1,1);// aqua
-            DrawLine(x + 1, y + 1, x + 1, y);
+          DrawLine(x + 1, y + 1, x + 1, y);
         if (bottom)
-            glColor3d(0,0,0);
-            DrawLine(x + 1, y, x, y);
+          DrawLine(x + 1, y, x, y);
         
         // draw walls as GL_QUADS
         // figure out a way to draw each wall in a different color. (you don't have to save the color of the wall)
@@ -87,13 +80,15 @@ void Cell::Draw(int x, int y)
 
 Maze::Maze()
 {
-
+    RemoveWalls();
 }
 void Maze::RemoveWalls()
 {
+    srand(time(0));
+    cells[0][0].bottom= false;
     RemoveWallsR(0, 0);
+    cells[WIDTH-1][HEIGHT-1].top=false;
 
-    // Remove top and bottom wall
 }
 
 void Maze::RemoveWallsR(int i, int j)
@@ -110,12 +105,12 @@ void Maze::RemoveWallsR(int i, int j)
         if (i - 1 >= 0 && !cells[i - 1][j].visited)
         {
             moves.push_back(LEFT);
-        }/*
-        if (i <= 1 && !cells[i+1][j].visited)
+        }
+        if (i+1 < WIDTH && !cells[i+1][j].visited)
         {
             moves.push_back(RIGHT);
         }
-        if (j <= 1 && !cells[i][j+1].visited)
+        if (j+1 < HEIGHT && !cells[i][j+1].visited)
         {
             moves.push_back(UP);
         }
@@ -123,7 +118,6 @@ void Maze::RemoveWallsR(int i, int j)
         {
             moves.push_back(DOWN);
         }
-*/
         if (moves.size() == 0)
         {
             return;
@@ -137,25 +131,25 @@ void Maze::RemoveWallsR(int i, int j)
             cells[i][j].left = false;
             cells[i - 1][j].right = false;
             RemoveWallsR(i - 1, j);
-        }/*
+        }
         if (moves[r] == RIGHT)
         {
-            cells[i-1][j].right = false;
-            cells[i][j].left = false;
-            RemoveWallsR(i - 1, j);
+            cells[i][j].right = false;
+            cells[i+1][j].left = false;
+            RemoveWallsR(i + 1, j);
         }
         if (moves[r] == UP)
         {
-            cells[i][j-1].top = false;
-            cells[i][j].bottom = false;
-            RemoveWallsR(i, j-1);
+            cells[i][j].top = false;
+            cells[i][j+1].bottom = false;
+            RemoveWallsR(i, j+1);
         }
         if (moves[r] == DOWN)
         {
             cells[i][j].bottom = false;
             cells[i][j-1].top = false;
             RemoveWallsR(i, j-1);
-        }*/
+        }
 
     }
 
@@ -166,44 +160,33 @@ void Maze::Draw()
     for (int i = 0; i < WIDTH; i++)
         for (int j = 0; j < HEIGHT; j++)
             cells[i][j].Draw(i, j);
-    RemoveWalls();
 }
 // gets stuck in wall since angle affects dx and dy
 bool Maze::IsSafe(double x,double y, double r){
-    x -= (int)x;
-    y -= (int)y;
-    // need to tell if a wall is there or not first then test to see if it crosses the wall
-        //left wall
-    if(x - r <= 0){
-        return false;
+    int i = (int)x;
+    int j = (int)y;
+    double size = .2; // comes from rat size if change need to update for rat
+    x=x-i;
+    y=y-j;
+    if (cells[i][j].right && x+size > 1.0) {
+            return false;
+    }else if (cells[i][j].left && x-size < 0.0) {
+            return false;
+    }else if (cells[i][j].top && y+size > 1.0) {
+            return false;
+    }else if (cells[i][j].bottom && y-size < 0.0) {
+            return false;
     }
-        //right wall
-    if(x + r >= 1){
-        return false;
+
+    if (x+size > 1.0 && y-size < 0.0) {
+            return false;
+    }else if (x+size > 1.0 && y+size >1.0) {
+            return false;
+    } else if (x-size < 0.0 && y-size < 0.00) {
+            return false;
+    } else if (x-size < 0.0 && y+size > 1.0) {
+            return false;
     }
-        //top wall
-    if(y + r >= 1){
-        return false;
-    }
-        //bottom wall
-    if(y-r <= 0){
-        return false;
-    }
-        //topleft corner
-    if(x-r <= 0.05 and y+r >= .95){
-        return false;
-    }
-        //top right corner
-    if(x+r >= .95 and y+r >= .95){
-        return false;
-    }
-        //bottom left corner
-    if(x-r <= .05 and y-r <= .05){
-        return false;
-    }
-        //bottom right corner
-    if(x+r >= .95 and y-r <= .05){
-        return false;
-    }
+
     return true;
 }
