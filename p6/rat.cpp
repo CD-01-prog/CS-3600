@@ -1,44 +1,43 @@
-//
-//  Rat.cpp
-//  Prog5
+//  Prog6
 //
 //  Created by Caleb J. Delaney on 2/20/20.
 //  Copyright © 2020 Caleb J. Delaney. All rights reserved.
 //
 
-#include "Rat.hpp"
-#include "maze.h"
+#include "rat.hpp"
+#include "maze.hpp"
 #include <cmath>
 #include <GLUT/glut.h>
 
 Rat::Rat(){
-    x = 2.5;
+    x = .5;
     y = .5;
     degrees = 90.;
     dx = std::cos(degrees * 3.1415926 / 180.);
     dy = std::sin(degrees * 3.1415926 / 180.);
-    Speed = .001;
+    Speed = .1;
     size = .2;
 }
 
 void Rat::SpinLeft(){
-    degrees += .05 * 30;
+    degrees += .05 * 60;
     dx = std::cos(degrees * 3.1415926 / 180.);
     dy = std::sin(degrees * 3.1415926 / 180.);
     
 }
 void Rat::SpinRight(){
-    degrees -= .05 * 30;
+    degrees -= .05 * 60;
     dx = std::cos(degrees * 3.1415926 / 180.);
     dy = std::sin(degrees * 3.1415926 / 180.);
 }
 void Rat::ScurryForward(){
-        x += dx * Speed * 30;
-        y += dy * Speed * 30;
+        x += dx * Speed;
+        y += dy * Speed;
 }
+
 void Rat::ScurryBackward(){
-    x -= dx * Speed * 30;
-    y -= dy * Speed * 30;
+    x -= dx * Speed;
+    y -= dy * Speed;
 }
 void Rat::Draw(){
     glPushMatrix();
