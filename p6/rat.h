@@ -1,6 +1,6 @@
 //
 //  Rat.hpp
-//  Prog5
+//  Prog6
 //
 //  Created by Caleb J. Delaney on 2/20/20.
 //  Copyright © 2020 Caleb J. Delaney. All rights reserved.
