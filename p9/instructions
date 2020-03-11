@@ -15,3 +15,29 @@ Place all chess pieces correctly on the board, both white and black.
 Place a light in the scene.
 Animate the first 6 moves of a chess game, including a piece capture. Be creative.
 Draw all pieces using Display Lists.
+
+
+//not instructions just game plan
+1 
+e2 -> e4(white)
+e7 -> e5(black)
+
+2
+g1 -> f3 (white)
+f7 -> f6 (black)
+
+3
+f1 -> c4 (white)
+c7 -> c6 (black)
+
+4
+f3 -> e5 (white) (peice capture)
+f6 -> e5 (black) (peice capture)
+
+5
+d1 -> h5 (white) (check)
+e8 -> e7 (black)
+
+6
+h5 -> e5 (white) (checkmate)
+(end game)
