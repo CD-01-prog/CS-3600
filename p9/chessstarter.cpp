@@ -1,4 +1,4 @@
-// (your name here)
+// Caleb Delaney
 // Chess animation starter kit.
 
 #include <stdlib.h>
@@ -142,7 +142,84 @@ double at[3]  = {4500, 0,     4000};
 //
 // GLUT callback functions
 //
+void DrawBoard()
+{
+//    glBegin(GL_QUADS);
+//    glVertex3d(0, -1000, 0);
+//    glVertex3d(0, -1000, 9000);
+//    glVertex3d(9000, -1000, 9000);
+//    glVertex3d(9000, -1000, 0);
+//    glEnd();
+    GLfloat checker_dark[] = {0.0, 0.0, 0.0, 1.0};
+    GLfloat checker_light[] = {1.0, 1.0, 1.0, 1.0};
+    bool oddCol = false;
+    bool oddRow = false;
+    for (int row=500; row<8000; row+=1000)
+    {
+        for (int col=500; col<8000; col+=1000)
+        {
+            if (!oddRow)
+            {
+                // even row
+                if (!oddCol)
+                {
+                    // even col
+                    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, checker_light);
 
+                }
+                else
+                {
+                    // odd col
+                    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, checker_dark);
+                }
+            }
+            else
+            {
+                // odd row
+                if (!oddCol)
+                {
+                    // even col
+                    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, checker_dark);
+
+                }
+                else
+                {
+                    // odd col
+                    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, checker_light);
+                }
+            }
+            glBegin(GL_POLYGON);
+            glNormal3f(0, 1, 0);
+            glVertex3d(col, 0, row);
+            glVertex3d(col, 0, row + 1000);
+            glVertex3d(col + 1000, 0, row + 1000);
+            glVertex3d(col + 1000, 0, row);
+            glEnd();
+
+            glBegin(GL_POLYGON);
+            glNormal3f(0, 0, -1);
+            glVertex3d(col, 0, row);
+            glVertex3d(col, -1000, row);
+            glVertex3d(col + 1000, -1000, row);
+            glVertex3d(col + 1000, 0, row);
+            glEnd();
+
+            oddCol = !oddCol;
+        }
+        oddRow = !oddRow;
+    }
+}
+/*example of display list
+static void init(void)
+{
+    theTorus = glGenLists (1);
+   glNewList(theTorus, GL_COMPILE);
+   torus(8, 25);
+   glEndList();
+
+   glShadeModel(GL_FLAT);
+   glClearColor(0.0, 0.0, 0.0, 0.0);
+}*/
 // As t goes from t0 to t1, set v between v0 and v1 accordingly.
 void Interpolate(double t, double t0, double t1,
 	double & v, double v0, double v1)
@@ -159,6 +236,7 @@ void Interpolate(double t, double t0, double t1,
 // system whenever it decides things need to be redrawn.
 void display(void)
 {
+    double x,z;
 	double t = GetTime();
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -166,7 +244,7 @@ void display(void)
 	glLoadIdentity();
 	gluLookAt(eye[0], eye[1], eye[2],  at[0], at[1], at[2],  0,1,0); // Y is up!
     //draw board
-    
+    DrawBoard();
 	// Set the color for one side (white), and draw its 16 pieces.
     {
 	GLfloat mat_amb_diff1[] = {0.8f, 0.9f, 0.5f, 1.0f};
@@ -214,7 +292,7 @@ void display(void)
             }
         }
         {//draw queen
-	//double z;
+	//z = 0;
 	//Interpolate(t, 1.0, 3.0, z, 1000, 5000);
 	glPushMatrix();
 	glTranslatef(5000, 0, 1000);
