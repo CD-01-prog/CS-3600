@@ -1,4 +1,4 @@
-// Caleb Delaney
+// caleb delaney
 // Chess animation starter kit.
 
 #include <stdlib.h>
@@ -26,6 +26,10 @@ GLdouble whiteMaterial[] = {1.0, 1.0, 1.0, 1.0};
 double screen_x = 600;
 double screen_y = 500;
 
+enum viewtype {white_view, black_view};
+extern viewtype current_view;
+
+viewtype current_view = white_view;
 
 double GetTime()
 {
@@ -137,8 +141,8 @@ void DrawPiece(string filename)
 }
 
 // NOTE: Y is the UP direction for the chess pieces.
-double eye[3] = {4500, 8000, -4000}; // pick a nice vantage point.
-double at[3]  = {4500, 0,     4000};
+double eye[3] = {4500, 8000, -4500}; // pick a nice vantage point.
+double at[3]  = {4500, 0,     4500};
 //
 // GLUT callback functions
 //
@@ -188,38 +192,47 @@ void DrawBoard()
                     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, checker_light);
                 }
             }
-            glBegin(GL_POLYGON);
+           glBegin(GL_POLYGON);
             glNormal3f(0, 1, 0);
             glVertex3d(col, 0, row);
             glVertex3d(col, 0, row + 1000);
             glVertex3d(col + 1000, 0, row + 1000);
             glVertex3d(col + 1000, 0, row);
             glEnd();
-
-            glBegin(GL_POLYGON);
-            glNormal3f(0, 0, -1);
-            glVertex3d(col, 0, row);
-            glVertex3d(col, -1000, row);
-            glVertex3d(col + 1000, -1000, row);
-            glVertex3d(col + 1000, 0, row);
-            glEnd();
-
+            
             oddCol = !oddCol;
         }
         oddRow = !oddRow;
     }
-}
-/*example of display list
-static void init(void)
-{
-    theTorus = glGenLists (1);
-   glNewList(theTorus, GL_COMPILE);
-   torus(8, 25);
-   glEndList();
-
-   glShadeModel(GL_FLAT);
-   glClearColor(0.0, 0.0, 0.0, 0.0);
-}*/
+    //white side boarder**** add chekcer light so all looks the same*****
+    int c = 0;
+    for(int i=500; i <8000; i+= 1000){
+        if (c % 2 != 0){
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, checker_dark);
+    glBegin(GL_POLYGON);
+    glNormal3f(0,0,-1);
+    glVertex3d(i, 0, 500);
+    glVertex3d(i, -1000, 500);
+    glVertex3d(i+ 1000, -1000, 500);
+    glVertex3d(i+ 1000, 0, 500);
+            glEnd();}
+        c += 1;
+    }
+    c = 0;
+    //black side border
+    for(int i=500; i <8000; i+= 1000){
+    if (c % 2 == 0){
+    glBegin(GL_POLYGON);
+    glNormal3f(0,0,-1);
+    glVertex3d(i, 0, 8500);
+    glVertex3d(i, -1000, 8500);
+    glVertex3d(i+1000, -1000, 8500);
+    glVertex3d(i+1000, 0, 8500);
+    glEnd();}
+    c+=1;
+        
+    }
+    }
 // As t goes from t0 to t1, set v between v0 and v1 accordingly.
 void Interpolate(double t, double t0, double t1,
 	double & v, double v0, double v1)
@@ -242,7 +255,13 @@ void display(void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glLoadIdentity();
+    if(current_view == white_view){
 	gluLookAt(eye[0], eye[1], eye[2],  at[0], at[1], at[2],  0,1,0); // Y is up!
+    }
+    else{
+        gluLookAt(eye[0], eye[1], eye[2]*(-3),  at[0], at[1], at[2],  0,1,0);
+        //eye[2] -> -4500 to 13500
+    }
     //draw board
     DrawBoard();
 	// Set the color for one side (white), and draw its 16 pieces.
@@ -253,13 +272,13 @@ void display(void)
         {// draw bishop 1
 	glPushMatrix();
 	glTranslatef(3000, 0, 1000);
-	DrawPiece("/Users/cdelaney/Desktop/prog9/prog9/BISHOP.POL");
+    glCallList(1);
 	glPopMatrix();
         }
         {//draw bishop 2
         glPushMatrix();
         glTranslatef(6000, 0, 1000);
-        DrawPiece("/Users/cdelaney/Desktop/prog9/prog9/BISHOP.POL");
+        glCallList(1);
         glPopMatrix();
         }
         }
@@ -267,13 +286,13 @@ void display(void)
             {//draw horse 1
                 glPushMatrix();
                 glTranslatef(2000, 0, 1000);
-                DrawPiece("/Users/cdelaney/Desktop/prog9/prog9/KNIGHT.POL");
+                glCallList(2);
                 glPopMatrix();
             }
             {//draw horse 2
                 glPushMatrix();
                 glTranslatef(7000, 0, 1000);
-                DrawPiece("/Users/cdelaney/Desktop/prog9/prog9/KNIGHT.POL");
+                glCallList(2);
                 glPopMatrix();
             }
         }
@@ -281,13 +300,13 @@ void display(void)
             {//draw rook 1
                 glPushMatrix();
                 glTranslatef(1000, 0, 1000);
-                DrawPiece("/Users/cdelaney/Desktop/prog9/prog9/ROOK.POL");
+                glCallList(3);
                 glPopMatrix();
             }
             {//draw rook 2
                 glPushMatrix();
                 glTranslatef(8000, 0, 1000);
-                DrawPiece("/Users/cdelaney/Desktop/prog9/prog9/ROOK.POL");
+                glCallList(3);
                 glPopMatrix();
             }
         }
@@ -296,20 +315,20 @@ void display(void)
 	//Interpolate(t, 1.0, 3.0, z, 1000, 5000);
 	glPushMatrix();
 	glTranslatef(5000, 0, 1000);
-	DrawPiece("/Users/cdelaney/Desktop/prog9/prog9/QUEEN.POL");
+	glCallList(5);
 	glPopMatrix();
         }
         {//draw king
     glPushMatrix();
     glTranslatef(4000, 0, 1000);
-    DrawPiece("/Users/cdelaney/Desktop/prog9/prog9/KING.POL");
+    glCallList(4);
     glPopMatrix();
         }
     for(int x=1000; x<=8000; x+= 1000)
     {//draw pawns
         glPushMatrix();
         glTranslatef(x, 0, 2000);
-        DrawPiece("/Users/cdelaney/Desktop/prog9/prog9/PAWN.POL");
+        glCallList(6);
         glPopMatrix();
     }
     }
@@ -321,50 +340,50 @@ void display(void)
             {// draw bishop 1
         glPushMatrix();
         glTranslatef(3000, 0, 8000);
-        DrawPiece("/Users/cdelaney/Desktop/prog9/prog9/BISHOP.POL");
+        glCallList(1);
         glPopMatrix();
             }
             {//draw bishop 2
             glPushMatrix();
             glTranslatef(6000, 0, 8000);
-            DrawPiece("/Users/cdelaney/Desktop/prog9/prog9/BISHOP.POL");
+            glCallList(1);
             glPopMatrix();
             }
             }
-            {//draw horses
-                {//draw horse 1
-                    glPushMatrix();
-                    glTranslatef(2000, 0, 8000);
-                    DrawPiece("/Users/cdelaney/Desktop/prog9/prog9/KNIGHT.POL");
-                    glPopMatrix();
-                }
-                {//draw horse 2
-                    glPushMatrix();
-                    glTranslatef(7000, 0, 8000);
-                    DrawPiece("/Users/cdelaney/Desktop/prog9/prog9/KNIGHT.POL");
-                    glPopMatrix();
-                }
+        {//draw horses
+            {//draw horse 1
+                glPushMatrix();
+                glTranslatef(2000, 0, 8000);
+                glCallList(2);
+                glPopMatrix();
             }
-            {//draw rooks
-                {//draw rook 1
-                    glPushMatrix();
+            {//draw horse 2
+                glPushMatrix();
+                glTranslatef(7000, 0, 8000);
+                glCallList(2);
+                glPopMatrix();
+            }
+        }
+        {//draw rooks
+            {//draw rook 1
+                glPushMatrix();
                     glTranslatef(1000, 0, 8000);
-                    DrawPiece("/Users/cdelaney/Desktop/prog9/prog9/ROOK.POL");
+                    glCallList(3);
                     glPopMatrix();
                 }
                 {//draw rook 2
                     glPushMatrix();
                     glTranslatef(8000, 0, 8000);
-                    DrawPiece("/Users/cdelaney/Desktop/prog9/prog9/ROOK.POL");
+                    glCallList(3);
                     glPopMatrix();
                 }
             }
-            {//draw queen
+        {//draw queen
         //double z;
         //Interpolate(t, 1.0, 3.0, z, 1000, 5000);
         glPushMatrix();
         glTranslatef(5000, 0, 8000);
-        DrawPiece("/Users/cdelaney/Desktop/prog9/prog9/QUEEN.POL");
+        glCallList(5);
         glPopMatrix();
             }
     {//draw king
@@ -372,14 +391,14 @@ void display(void)
 	//Interpolate(t, 4.0, 6.0, x, 4000, 2000);
 	glPushMatrix();
 	glTranslatef(4000, 0, 8000);
-	DrawPiece("/Users/cdelaney/Desktop/prog9/prog9/KING.POL");
+	glCallList(4);
 	glPopMatrix();
     }
 	for(int x=1000; x<=8000; x+=1000)
 	{//draw pawns
 		glPushMatrix();
 		glTranslatef(x, 0, 7000);
-		DrawPiece("/Users/cdelaney/Desktop/prog9/prog9/PAWN.POL");
+		glCallList(6);
 		glPopMatrix();
 	}
 }
@@ -400,6 +419,12 @@ void keyboard(unsigned char c, int x, int y)
 		case 27: // escape character means to quit the program
 			exit(0);
 			break;
+        case 'w':// see from white side
+            current_view = white_view;
+            break;
+        case 'b':// see from black side
+            current_view = black_view;
+            break;
 		default:
 			return; // if we don't care, return without glutPostRedisplay()
 	}
@@ -474,6 +499,32 @@ void InitializeMyStuff()
 	glEnable(GL_DEPTH_TEST); // turn on depth buffering
 	glEnable(GL_LIGHTING);	// enable general lighting
 	glEnable(GL_LIGHT0);	// enable the first light.
+    
+    glNewList(1, GL_COMPILE);
+    DrawPiece("/Users/cdelaney/Desktop/prog9/prog9/BISHOP.POL");
+    glEndList();
+    
+    glNewList(2, GL_COMPILE);
+    DrawPiece("/Users/cdelaney/Desktop/prog9/prog9/KNIGHT.POL");
+    glEndList();
+    
+    glNewList(3, GL_COMPILE);
+    DrawPiece("/Users/cdelaney/Desktop/prog9/prog9/ROOK.POL");
+    glEndList();
+    
+    glNewList(4, GL_COMPILE);
+    DrawPiece("/Users/cdelaney/Desktop/prog9/prog9/KING.POL");
+    glEndList();
+    
+    glNewList(5, GL_COMPILE);
+    DrawPiece("/Users/cdelaney/Desktop/prog9/prog9/QUEEN.POL");
+    glEndList();
+    
+    glNewList(6, GL_COMPILE);
+    DrawPiece("/Users/cdelaney/Desktop/prog9/prog9/PAWN.POL");
+    glEndList();
+    
+    
 }
 
 
