@@ -148,16 +148,14 @@ double at[3]  = {4500, 0,     4500};
 //
 void DrawBoard()
 {
-//    glBegin(GL_QUADS);
-//    glVertex3d(0, -1000, 0);
-//    glVertex3d(0, -1000, 9000);
-//    glVertex3d(9000, -1000, 9000);
-//    glVertex3d(9000, -1000, 0);
-//    glEnd();
-    GLfloat checker_dark[] = {0.0, 0.0, 0.0, 1.0};
-    GLfloat checker_light[] = {1.0, 1.0, 1.0, 1.0};
+    GLfloat dark[] = {0.0, 0.0, 0.0, 1.0};
+    GLfloat light[] = {1.0, 1.0, 1.0, 1.0};
     bool oddCol = false;
     bool oddRow = false;
+    int r = 0;
+    int c = 0;
+    int o = 0;
+    //board
     for (int row=500; row<8000; row+=1000)
     {
         for (int col=500; col<8000; col+=1000)
@@ -168,13 +166,13 @@ void DrawBoard()
                 if (!oddCol)
                 {
                     // even col
-                    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, checker_light);
+                    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, light);
 
                 }
                 else
                 {
                     // odd col
-                    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, checker_dark);
+                    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, dark);
                 }
             }
             else
@@ -183,13 +181,13 @@ void DrawBoard()
                 if (!oddCol)
                 {
                     // even col
-                    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, checker_dark);
+                    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, dark);
 
                 }
                 else
                 {
                     // odd col
-                    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, checker_light);
+                    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, light);
                 }
             }
            glBegin(GL_POLYGON);
@@ -203,35 +201,32 @@ void DrawBoard()
             oddCol = !oddCol;
         }
         oddRow = !oddRow;
-    }
-    //white side boarder**** add chekcer light so all looks the same*****
-    int c = 0;
-    for(int i=500; i <8000; i+= 1000){
-        if (c % 2 != 0){
-    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, checker_dark);
-    glBegin(GL_POLYGON);
-    glNormal3f(0,0,-1);
-    glVertex3d(i, 0, 500);
-    glVertex3d(i, -1000, 500);
-    glVertex3d(i+ 1000, -1000, 500);
-    glVertex3d(i+ 1000, 0, 500);
-            glEnd();}
-        c += 1;
-    }
-    c = 0;
-    //black side border
-    for(int i=500; i <8000; i+= 1000){
-    if (c % 2 == 0){
-    glBegin(GL_POLYGON);
-    glNormal3f(0,0,-1);
-    glVertex3d(i, 0, 8500);
-    glVertex3d(i, -1000, 8500);
-    glVertex3d(i+1000, -1000, 8500);
-    glVertex3d(i+1000, 0, 8500);
-    glEnd();}
-    c+=1;
+        //white side boarder
+        if (o % 2 != 0){
+                glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, dark);}
+        else{glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, light);}
+        glBegin(GL_POLYGON);
+        glNormal3f(0,0,-1);
+        glVertex3d(row, 0, 500);
+        glVertex3d(row, -1000, 500);
+        glVertex3d(row+ 1000, -1000, 500);
+        glVertex3d(row+ 1000, 0, 500);
+        glEnd();
+            
+        //draw black side boarder
+        if (o % 2 == 0){glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, dark);}
+        else{glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, light);}
+        glBegin(GL_POLYGON);
+        glNormal3f(0,0,-1);
+        glVertex3d(row, 0, 8500);
+        glVertex3d(row, -1000, 8500);
+        glVertex3d(row+1000, -1000, 8500);
+        glVertex3d(row+1000, 0, 8500);
+        glEnd();
         
+        o+=1;
     }
+    
     }
 // As t goes from t0 to t1, set v between v0 and v1 accordingly.
 void Interpolate(double t, double t0, double t1,
