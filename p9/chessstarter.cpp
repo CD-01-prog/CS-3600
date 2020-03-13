@@ -1,6 +1,6 @@
 // caleb delaney
 // Chess animation starter kit.
-
+//inspect pawns is currently last step
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
@@ -150,8 +150,6 @@ void DrawBoard()
 {
     GLfloat dark[] = {0.0, 0.0, 0.0, 1.0};
     GLfloat light[] = {1.0, 1.0, 1.0, 1.0};
-    bool oddCol = false;
-    bool oddRow = false;
     int r = 0;
     int c = 0;
     int o = 0;
@@ -160,10 +158,10 @@ void DrawBoard()
     {
         for (int col=500; col<8000; col+=1000)
         {
-            if (!oddRow)
+            if (r % 2 == 0)
             {
                 // even row
-                if (!oddCol)
+                if (c % 2 == 0)
                 {
                     // even col
                     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, light);
@@ -178,7 +176,7 @@ void DrawBoard()
             else
             {
                 // odd row
-                if (!oddCol)
+                if (c % 2 == 0)
                 {
                     // even col
                     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, dark);
@@ -198,12 +196,12 @@ void DrawBoard()
             glVertex3d(col + 1000, 0, row);
             glEnd();
             
-            oddCol = !oddCol;
+            
+            c += 1;
         }
-        oddRow = !oddRow;
         //white side boarder
         if (o % 2 != 0){
-                glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, dark);}
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, dark);}
         else{glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, light);}
         glBegin(GL_POLYGON);
         glNormal3f(0,0,-1);
@@ -225,6 +223,8 @@ void DrawBoard()
         glEnd();
         
         o+=1;
+        r += 1;
+        
     }
     
     }
@@ -259,16 +259,20 @@ void display(void)
     }
     //draw board
     DrawBoard();
-	// Set the color for one side (white), and draw its 16 pieces.
+	// Set the color for one side white, and draw its 16 pieces.
     {
 	GLfloat mat_amb_diff1[] = {0.8f, 0.9f, 0.5f, 1.0f};
 	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, mat_amb_diff1);
         {//draw bishops
         {// draw bishop 1
-	glPushMatrix();
-	glTranslatef(3000, 0, 1000);
-    glCallList(1);
-	glPopMatrix();
+            x = 0;
+            z = 0;
+            Interpolate(t, 2.6, 3.0, z, 1000, 4000);
+            Interpolate(t, 2.6, 3.0, x, 3000, 6000);
+            glPushMatrix();
+            glTranslatef(x, 0, z);
+            glCallList(1);
+            glPopMatrix();
         }
         {//draw bishop 2
         glPushMatrix();
@@ -279,8 +283,21 @@ void display(void)
         }
         {//draw horses
             {//draw horse 1
+                x = 0;
+                z = 0;
+                if (t >= 4.5){
+                    Interpolate(t, 4.5, 4.9, x, 4000, 10000);
+                    z = 5000;
+                }
+                else if (t >= 3.4){
+                    Interpolate(t, 3.4, 3.8, z, 3000, 5000);
+                    Interpolate(t, 3.8, 4.2, x, 3000, 4000);
+                }
+                else{
+                Interpolate(t, 1.4, 1.8, z, 1000, 3000);
+                    Interpolate(t, 1.8, 2.2, x, 2000, 3000);}
                 glPushMatrix();
-                glTranslatef(2000, 0, 1000);
+                glTranslatef(x, 0, z);
                 glCallList(2);
                 glPopMatrix();
             }
@@ -306,12 +323,19 @@ void display(void)
             }
         }
         {//draw queen
-	//z = 0;
-	//Interpolate(t, 1.0, 3.0, z, 1000, 5000);
-	glPushMatrix();
-	glTranslatef(5000, 0, 1000);
-	glCallList(5);
-	glPopMatrix();
+            z = 0;
+            x = 5000;
+            if (t >= 5.6){
+                z = 5000;
+                Interpolate(t, 5.7, 6.1, x, 1000, 4000);
+            }
+            else{
+            Interpolate(t, 4.9, 5.3, z, 1000, 5000);
+                Interpolate(t, 4.9, 5.3, x, 5000, 1000);}
+            glPushMatrix();
+            glTranslatef(x, 0, z);
+            glCallList(5);
+            glPopMatrix();
         }
         {//draw king
     glPushMatrix();
@@ -319,15 +343,34 @@ void display(void)
     glCallList(4);
     glPopMatrix();
         }
-    for(int x=1000; x<=8000; x+= 1000)
+    for(double x=1000; x<=8000; x+= 1000)
     {//draw pawns
+        if(x == 4000){
+            z=0;
+            Interpolate(t, 0.5, 0.9, z, 2000, 4000);
+            glPushMatrix();
+            glTranslatef(x, 0, z);
+            glCallList(6);
+            glPopMatrix();
+            
+        }
+        else if(x == 2000){
+            glPushMatrix();
+            glTranslatef(x, 0, 2000);
+            glCallList(6);
+            glPopMatrix();
+            
+        }
+        else{
         glPushMatrix();
         glTranslatef(x, 0, 2000);
         glCallList(6);
         glPopMatrix();
     }
     }
-	// Set the color for one side (black), and draw its 16 pieces.
+        
+    }
+	// Set the color for one side black, and draw its 16 pieces.
     {//draw black peices
 	GLfloat mat_amb_diff2[] = {0.1f, 0.5f, 0.8f, 1.0};
 	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, mat_amb_diff2);
@@ -374,27 +417,66 @@ void display(void)
                 }
             }
         {//draw queen
-        //double z;
-        //Interpolate(t, 1.0, 3.0, z, 1000, 5000);
+        z=0;
+        Interpolate(t, 1.0, 3.0, z, 1000, 5000);
         glPushMatrix();
         glTranslatef(5000, 0, 8000);
         glCallList(5);
         glPopMatrix();
             }
     {//draw king
-	//double x;
-	//Interpolate(t, 4.0, 6.0, x, 4000, 2000);
+	x=0;
+    z=8000;//starting point
+	Interpolate(t, 5.3, 5.7, z, 8000, 7000);
 	glPushMatrix();
-	glTranslatef(4000, 0, 8000);
+	glTranslatef(4000, 0, z);
 	glCallList(4);
 	glPopMatrix();
     }
-	for(int x=1000; x<=8000; x+=1000)
+	for(double x=1000; x<=8000; x+=1000)
 	{//draw pawns
+        if(x == 4000){
+            z=0;
+            Interpolate(t, 1.0, 1.4, z, 7000, 5000);
+            Interpolate(t, 4.0, 4.3, x, 4000, 11000);
+            glPushMatrix();
+            glTranslatef(x, 0, z);
+            glCallList(6);
+            glPopMatrix();
+            
+        }
+        else if (x == 3000){
+            z=0;
+            if (t >= 5.9){
+                Interpolate(t, 4.3, 4.7, x, 4000,9000);
+                z = 5000;
+            }
+            else if (t >= 4.3){
+                Interpolate(t, 4.3, 4.7, x, 3000,4000);
+                Interpolate(t, 4.3, 4.7, z, 6000, 5000);}
+            else{
+                Interpolate(t, 2.2, 2.6, z, 7000, 6000);}
+            glPushMatrix();
+            glTranslatef(x, 0, z);
+            glCallList(6);
+            glPopMatrix();
+            
+        }
+        else if (x == 6000){
+            z=0;
+            Interpolate(t, 3.0, 3.4, z, 7000, 6000);
+            glPushMatrix();
+            glTranslatef(x, 0, z);
+            glCallList(6);
+            glPopMatrix();
+            
+        }
+        else{
 		glPushMatrix();
 		glTranslatef(x, 0, 7000);
 		glCallList(6);
 		glPopMatrix();
+        }
 	}
 }
 	GLfloat light_position[] = {1,2,-.1f, 0}; // light comes FROM this vector direction.
@@ -539,7 +621,7 @@ int main(int argc, char **argv)
 	} 
 	else 
 	{
-		glutCreateWindow("Shapes");
+		glutCreateWindow("Chess");
 	}
 
 	glutDisplayFunc(display);
