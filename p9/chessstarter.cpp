@@ -443,6 +443,7 @@ void display(void)
             glTranslatef(x, 0, z);
             glCallList(6);
             glPopMatrix();
+	 x = 4000
             
         }
         else if (x == 3000){
@@ -460,6 +461,7 @@ void display(void)
             glTranslatef(x, 0, z);
             glCallList(6);
             glPopMatrix();
+		x = 3000
             
         }
         else if (x == 6000){
